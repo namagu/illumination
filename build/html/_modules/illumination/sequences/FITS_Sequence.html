@@ -1,0 +1,396 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>illumination.sequences.FITS_Sequence &#8212; illumination 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for illumination.sequences.FITS_Sequence</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Define a sequence of FITS images.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">.filenameparsers</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.Image_Sequence</span> <span class="k">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="FITS_Sequence"><a class="viewcode-back" href="../../../api.html#illumination.sequences.FITS_Sequence">[docs]</a><span class="k">class</span> <span class="nc">FITS_Sequence</span><span class="p">(</span><span class="n">Image_Sequence</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    A sequence of FITS images, with a time associated with each.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial</span><span class="p">,</span> <span class="n">ext_image</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ext_primary</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;FITS&#39;</span><span class="p">,</span>
+                       <span class="n">use_headers</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                       <span class="n">use_filenames</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                       <span class="n">filenameparser</span><span class="o">=</span><span class="n">flexible_filenameparser</span><span class="p">,</span>
+                       <span class="n">timekey</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeformat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initialize a Sequence of FITS images. The goal is</span>
+<span class="sd">        to create a list of FITS HDUs, one for each time.</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">            initial : many possible types</span>
+<span class="sd">                This is a flexible type of input, which could be...</span>
+<span class="sd">                    - single FITS filename, and an extension to use.</span>
+<span class="sd">                    - list of FITS filenames, and an extension to use.</span>
+<span class="sd">                    - a glob-like search string containing &#39;*&#39;.</span>
+<span class="sd">                    - single FITS HDUList, and an extension to use.</span>
+<span class="sd">                    - list of loaded FITS HDULists, and an extension to use.</span>
+
+<span class="sd">            ext_image : int</span>
+<span class="sd">                The extension that is the image.</span>
+
+<span class="sd">            ext_primary : int</span>
+<span class="sd">                The extension that is the primary for the FITS.</span>
+
+<span class="sd">            name : str</span>
+<span class="sd">                The name of this sequence.</span>
+
+<span class="sd">            use_headers : bool</span>
+<span class="sd">                Should we extract (time) information from the headers?</span>
+
+<span class="sd">            use_filenames : bool</span>
+<span class="sd">                Should we extract (time) information from the filenames?</span>
+
+<span class="sd">            filenameparser : function</span>
+<span class="sd">                This function takes a filename as input, and returns a</span>
+<span class="sd">                dictionary containing parsed keys and values derived from it.</span>
+
+<span class="sd">            timekey : string</span>
+<span class="sd">                Which temporal key should define the time axis?</span>
+
+<span class="sd">            timeformt : string</span>
+<span class="sd">                What&#39;s the time format for defining the time axis?</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="c1"># initialize the basic sequence</span>
+        <span class="n">Sequence</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="c1"># we keep the HDUs out of memory, until we need them</span>
+        <span class="c1"># (this should probably someday be rewritten as an iterator?)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hdulists</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># ultimately, we want to make a list of filenames or HDULists</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">initial</span><span class="p">)</span> <span class="o">==</span> <span class="n">fits</span><span class="o">.</span><span class="n">HDUList</span><span class="p">:</span>
+            <span class="c1"># if this is one HDUList, make it a list of them</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hdulists</span> <span class="o">=</span> <span class="p">[</span><span class="n">initial</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">initial</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="c1"># a search string</span>
+            <span class="k">if</span> <span class="s1">&#39;*&#39;</span> <span class="ow">in</span> <span class="n">initial</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">initial</span><span class="p">))</span>
+                <span class="c1">#self.hdulists = [fits.open(f) for f in glob.glob(initial)]</span>
+            <span class="c1"># a single file</span>
+            <span class="k">elif</span> <span class="s1">&#39;fit&#39;</span> <span class="ow">in</span> <span class="n">initial</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span> <span class="o">=</span> <span class="p">[</span><span class="n">initial</span><span class="p">]</span>
+                <span class="c1">#self.hdulists = [fits.open(initial)]</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">initial</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="c1"># a list of filenames</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">([</span><span class="nb">type</span><span class="p">(</span><span class="n">hdu</span><span class="p">)</span> <span class="o">==</span> <span class="n">fits</span><span class="o">.</span><span class="n">HDUList</span> <span class="k">for</span> <span class="n">hdu</span> <span class="ow">in</span> <span class="n">initial</span><span class="p">]):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_hdulists</span> <span class="o">=</span> <span class="n">initial</span>
+            <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">([</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">initial</span><span class="p">]):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span> <span class="o">=</span> <span class="n">initial</span>
+
+        <span class="c1"># if we&#39;re starting frmo hdulists, then get their filenames</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdulists</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span> <span class="o">=</span> <span class="p">[</span><span class="n">h</span><span class="o">.</span><span class="n">filename</span><span class="p">()</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdulists</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hdulists</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hdulists</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="p">)</span>
+
+        <span class="c1"># make sure this FITS_Sequence isn&#39;t empty</span>
+        <span class="c1">#assert(len(self.filenames) &gt; 0)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ext_primary</span> <span class="o">=</span> <span class="n">ext_primary</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ext_image</span> <span class="o">=</span> <span class="n">ext_image</span>
+        <span class="c1"># if len(self.hdulists) &gt; 0:</span>
+        <span class="c1">#	self.ext_image = np.minimum(self.ext_image, len(self.hdulists[0]))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">temporal</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">static</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spatial</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># populate the temporal axes, somehow</span>
+        <span class="k">assert</span><span class="p">(</span><span class="n">use_headers</span> <span class="ow">or</span> <span class="n">use_filenames</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">use_headers</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_populate_from_headers</span><span class="p">()</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;unable to extract temporal things from headers for </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">use_filenames</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_populate_from_filenames</span><span class="p">(</span><span class="n">filenameparser</span><span class="o">=</span><span class="n">filenameparser</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;unable to extract temporal things from filenames for </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+        <span class="c1"># make sure a time axis gets defined</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_define_time_axis</span><span class="p">(</span><span class="n">timekey</span><span class="o">=</span><span class="n">timekey</span><span class="p">,</span> <span class="n">timeformat</span><span class="o">=</span><span class="n">timeformat</span><span class="p">)</span>
+
+        <span class="c1"># make sure everything gets sorted by time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sort</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_sort</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Sort the images, and the temporals.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="c1"># calculate sorting indices</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">gps</span><span class="p">)</span>
+
+        <span class="c1"># sort the temporal values</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">temporal</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">temporal</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temporal</span><span class="p">[</span><span class="n">k</span><span class="p">])[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="c1"># sort the images</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdulists</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hdulists</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdulists</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">N</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        How many elements are in this sequence?</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_hdulist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Return an HDUlist for the ith element in the sequence.</span>
+
+<span class="sd">        (We might want to open them only one at a time, for memory&#39;s sake.)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdulists</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdulists</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">fits</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">memmap</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_clean_temporal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Move anything that&#39;s non-changing from temporal to static.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># move non-changing things to static</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temporal</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temporal</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># if we have a one-element sequence, repeat it in both static and temporal</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temporal</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">static</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temporal</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">static</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temporal</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">k</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">temporal</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temporal</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;the temporal keys for </span><span class="si">{}</span><span class="s1"> are </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temporal</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;the static keys for </span><span class="si">{}</span><span class="s1"> are </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">static</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span>
+
+    <span class="k">def</span> <span class="nf">_populate_from_filenames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filenameparser</span><span class="o">=</span><span class="n">flexible_filenameparser</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Pull the basic information and temporal axis from the filenames.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;populating </span><span class="si">{}</span><span class="s1"> information from the filenames (like </span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="p">):</span>
+            <span class="n">this</span> <span class="o">=</span> <span class="n">filenameparser</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+            <span class="c1"># create empty lists, if necessary</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">this</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">temporal</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c1"># tack this file onto the list</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">this</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">temporal</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">this</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+
+        <span class="c1"># move static things away from temporal</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clean_temporal</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_populate_from_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Attempt to populate the sequence from the headers.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;populating </span><span class="si">{}</span><span class="s1"> information from the headers&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+        <span class="c1"># pull out the first HDUList in the sequence</span>
+        <span class="n">first</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_hdulist</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># check to see if the requested image extension exists</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">first</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ext_image</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;image extension </span><span class="si">{}</span><span class="s1"> not found, switching to 0&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ext_image</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ext_image</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># load the headers for the primary and the image</span>
+        <span class="n">pri</span><span class="p">,</span> <span class="n">img</span> <span class="o">=</span> <span class="n">first</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ext_primary</span><span class="p">]</span><span class="o">.</span><span class="n">header</span><span class="p">,</span> <span class="n">first</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ext_image</span><span class="p">]</span><span class="o">.</span><span class="n">header</span>
+
+        <span class="c1"># if only a single image, everything is static (but can be viewed as temporal)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="p">[</span><span class="n">pri</span><span class="p">,</span> <span class="n">img</span><span class="p">]:</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">h</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">static</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">temporal</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">static</span><span class="p">[</span><span class="n">k</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="c1"># look through the unique extensions</span>
+            <span class="n">extensions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">ext_primary</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ext_image</span><span class="p">])</span>
+
+            <span class="c1"># create lists for each key in the headers</span>
+            <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">extensions</span><span class="p">:</span>
+                <span class="n">h</span> <span class="o">=</span> <span class="n">first</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">header</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">h</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">temporal</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c1"># compile all values from the headers</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">):</span>
+                <span class="n">hdulist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_hdulist</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s2">&quot;populating header </span><span class="si">{}</span><span class="s2"> of </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">),</span> <span class="n">progress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">extensions</span><span class="p">:</span>
+                    <span class="n">h</span> <span class="o">=</span> <span class="n">hdulist</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">header</span>
+                    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">h</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">temporal</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+
+            <span class="c1"># move static things away from temporal</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_clean_temporal</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_define_time_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timekey</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeformat</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="c1"># make up an imaginary GPS time (and keep track of whether it is fake)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">Time</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">),</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;gps&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;tdb&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timeisfake</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># try to pull out a specific key</span>
+        <span class="k">if</span> <span class="n">timekey</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">Time</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temporal</span><span class="p">[</span><span class="n">timekey</span><span class="p">]),</span>
+                        <span class="nb">format</span><span class="o">=</span><span class="n">timeformat</span> <span class="ow">or</span> <span class="s1">&#39;gps&#39;</span><span class="p">,</span>
+                        <span class="n">scale</span><span class="o">=</span><span class="n">timescale</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;using &quot;</span><span class="si">{}</span><span class="s1">&quot; as the time axis&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">timekey</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># try to pull a time axis from these</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;TIME&#39;</span><span class="p">,</span> <span class="s1">&#39;MJD&#39;</span><span class="p">,</span> <span class="s1">&#39;JD&#39;</span><span class="p">,</span> <span class="s1">&#39;BJD&#39;</span><span class="p">,</span> <span class="s1">&#39;BJD_TDB&#39;</span><span class="p">]:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># treat some value as a time</span>
+                    <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temporal</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+                    <span class="c1"># if it&#39;s already an astropy time, keep it as such</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Time</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">t</span>
+                    <span class="c1"># make an astropy time out of the values</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">Time</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">t</span><span class="p">),</span>
+                                    <span class="nb">format</span><span class="o">=</span><span class="n">timeformat</span> <span class="ow">or</span> <span class="n">guess_time_format</span><span class="p">(</span><span class="n">t</span><span class="p">),</span>
+                                    <span class="n">scale</span><span class="o">=</span><span class="n">timescale</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_timeisfake</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;guessing &quot;</span><span class="si">{}</span><span class="s1">&quot; is good as the time axis&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_timeisfake</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timestep</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Return the image data for a given timestep.</span>
+
+<span class="sd">        This function is called when you say `sequence[timestep]`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        timestep : int</span>
+<span class="sd">                A timestep index (which element in the sequence do you want?)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">timestep</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_hdulist</span><span class="p">(</span><span class="n">timestep</span><span class="p">)[</span><span class="bp">self</span><span class="o">.</span><span class="n">ext_image</span><span class="p">]</span><span class="o">.</span><span class="n">data</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basics.html">Basic Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  <li><a href="../sequences.html">illumination.sequences</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Zach Berta-Thompson.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

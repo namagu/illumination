@@ -1,0 +1,500 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>illumination.illustrations.IllustrationBase &#8212; illumination 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for illumination.illustrations.IllustrationBase</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">..imports</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">..sequences</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">..frames</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">..colors</span> <span class="k">import</span> <span class="n">cmap_norm_ticks</span>
+
+<span class="k">def</span> <span class="nf">get_writer</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Try to get an appropriate animation writer,</span>
+<span class="sd">    given the filename provided.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="s1">&#39;.mp4&#39;</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">writer</span> <span class="o">=</span> <span class="n">ani</span><span class="o">.</span><span class="n">writers</span><span class="p">[</span><span class="s1">&#39;ffmpeg&#39;</span><span class="p">](</span><span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">RuntimeError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;This computer seems unable to ffmpeg.&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">writer</span> <span class="o">=</span> <span class="n">ani</span><span class="o">.</span><span class="n">writers</span><span class="p">[</span><span class="s1">&#39;pillow&#39;</span><span class="p">](</span><span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">RuntimeError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span>
+            <span class="n">writer</span> <span class="o">=</span> <span class="n">ani</span><span class="o">.</span><span class="n">writers</span><span class="p">[</span><span class="s1">&#39;imagemagick&#39;</span><span class="p">](</span><span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;This computer seem unable to animate?&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">writer</span>
+
+<div class="viewcode-block" id="IllustrationBase"><a class="viewcode-back" href="../../../api.html#illumination.illustrations.IllustrationBase">[docs]</a><span class="k">class</span> <span class="nc">IllustrationBase</span><span class="p">(</span><span class="n">Talker</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This contains the basic layout and organization</span>
+<span class="sd">    for a linked visualization of images.</span>
+
+<span class="sd">    Other illustrations inherit from this basic one,</span>
+<span class="sd">    changing the</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">illustrationtype</span> <span class="o">=</span> <span class="s1">&#39;Base&#39;</span>
+
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                       <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                       <span class="n">figkw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
+                       <span class="n">sharecolorbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                       <span class="n">subplot_spec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">cmapkw</span><span class="o">=</span><span class="p">{},</span>
+                       <span class="o">**</span><span class="n">gridspeckw</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initialize an Illustration,</span>
+<span class="sd">        setting up its figure and basic layout.</span>
+
+<span class="sd">        nrows : int</span>
+<span class="sd">            The number of rows in the illustration.</span>
+
+<span class="sd">        ncols : int</span>
+<span class="sd">            The number of columns in the illustration.</span>
+
+<span class="sd">        figkw : dict</span>
+<span class="sd">            Keywords to pass along to create a figure.</span>
+
+<span class="sd">        **gridspeckw : dict</span>
+<span class="sd">            Any extra keywords are passed to the</span>
+<span class="sd">            gridspec</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">Talker</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefixformat</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{:&gt;32}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">subplot_spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># if there&#39;s a subplot_spec specified, then populate that</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">figure</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="n">subset</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="n">gridspeckw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;wspace&#39;</span><span class="p">,</span> <span class="s1">&#39;hspace&#39;</span><span class="p">,</span> <span class="s1">&#39;height_ratios&#39;</span><span class="p">,</span> <span class="s1">&#39;width_ratios&#39;</span><span class="p">]}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">GridSpecFromSubplotSpec</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span>
+                                                    <span class="n">ncols</span><span class="p">,</span>
+                                                    <span class="n">subplot_spec</span><span class="o">=</span><span class="n">subplot_spec</span><span class="p">,</span>
+                                                    <span class="o">**</span><span class="n">subset</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;built </span><span class="si">{}</span><span class="s1"> into an existing gridspec&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">illustrationtype</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># by default, create a new figure and grid spec</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">figure</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="o">**</span><span class="n">figkw</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="p">,</span> <span class="o">**</span><span class="n">gridspeckw</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;built </span><span class="si">{}</span><span class="s1"> into a new figure&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">illustrationtype</span><span class="p">))</span>
+
+
+        <span class="c1"># should this illustration have a shared colorbar, or separate ones?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sharecolorbar</span> <span class="o">=</span> <span class="n">sharecolorbar</span>
+
+        <span class="c1"># keep track of any keywords for generating a cmap (shared for the illustration)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmapkw</span> <span class="o">=</span> <span class="n">cmapkw</span>
+
+        <span class="c1"># create an empty dictionary, where frames will be stored</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frames</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># has this illustration been plotted yet?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hasbeenplotted</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        How should this illustration be represented?</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{}</span><span class="s1"> Illustration | (</span><span class="si">{}</span><span class="s1"> Frames)&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">illustrationtype</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;I&quot;</span><span class="si">{}</span><span class="s1">&quot;&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">illustrationtype</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_times</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Get *all* the times that are associated with this</span>
+<span class="sd">        illustration, in any frame.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="c1"># it&#39;s faster to convert from gps to floats and back again</span>
+
+        <span class="c1"># make a list of gps times</span>
+        <span class="n">gps</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">_get_times</span><span class="p">()</span><span class="o">.</span><span class="n">gps</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+
+        <span class="c1"># return that list, as times</span>
+        <span class="k">return</span> <span class="n">Time</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">gps</span><span class="p">),</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;gps&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;tdb&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_timesandcadence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">round</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Get all the unique times available across all the frames,</span>
+<span class="sd">        along with a suggested cadence set by the minimum</span>
+<span class="sd">        (rounded) differences between times.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        round : float</span>
+<span class="sd">                All times will be rounded to this value.</span>
+<span class="sd">                Times separated by less than this value</span>
+<span class="sd">                will be considered identical.</span>
+
+<span class="sd">                It is in units of seconds.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_precaculatedtimesandcadence</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_precaculatedtimesandcadence</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">times</span><span class="p">,</span> <span class="n">cadence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_precaculatedtimesandcadence</span><span class="p">[</span><span class="nb">round</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+
+            <span class="n">gps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">f</span><span class="o">.</span><span class="n">_get_times</span><span class="p">()</span><span class="o">.</span><span class="n">gps</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="o">.</span><span class="n">values</span><span class="p">()])</span>
+            <span class="c1"># alltimes =  Time(np.hstack(gps), format=&#39;gps&#39;)</span>
+            <span class="c1"># alltimes = []</span>
+            <span class="c1"># for k, f in self.frames.items():</span>
+            <span class="c1">#	alltimes.extend(f._get_times())</span>
+
+            <span class="k">if</span> <span class="nb">round</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">diffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">gps</span><span class="p">))</span>
+                <span class="nb">round</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">diffs</span><span class="p">[</span><span class="n">diffs</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">])</span>
+
+            <span class="n">baseline</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">gps</span><span class="p">)</span>
+            <span class="n">rounded</span> <span class="o">=</span> <span class="nb">round</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">((</span><span class="n">gps</span> <span class="o">-</span> <span class="n">baseline</span><span class="p">)</span> <span class="o">/</span> <span class="nb">round</span><span class="p">)</span> <span class="o">+</span> <span class="n">baseline</span>
+            <span class="n">uniquegpstimes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">rounded</span><span class="p">)</span>
+
+            <span class="c1"># make sure there&#39;s a cadence, even if there&#39;s only one element in the sequence</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">cadence</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">uniquegpstimes</span><span class="p">))</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">s</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="n">cadence</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">*</span><span class="n">u</span><span class="o">.</span><span class="n">s</span>
+
+            <span class="c1"># plt.figure(&#39;cadence!&#39;)</span>
+            <span class="c1"># plt.plot(uniquegpstimes[:-1], np.diff(uniquegpstimes), &#39;.&#39;)</span>
+            <span class="c1"># plt.show()</span>
+            <span class="n">times</span> <span class="o">=</span> <span class="n">Time</span><span class="p">(</span><span class="n">uniquegpstimes</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;gps&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_precaculatedtimesandcadence</span><span class="p">[</span><span class="nb">round</span><span class="p">]</span> <span class="o">=</span> <span class="n">times</span><span class="p">,</span> <span class="n">cadence</span>
+        <span class="k">return</span> <span class="n">times</span><span class="p">,</span> <span class="n">cadence</span>
+
+<div class="viewcode-block" id="IllustrationBase.plot"><a class="viewcode-back" href="../../../api.html#illumination.illustrations.IllustrationBase.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Plot all the frames in this illustration.</span>
+
+<span class="sd">        *args, **kwargs are passed to frames&#39; .plot()</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hasbeenplotted</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="IllustrationBase.update"><a class="viewcode-back" href="../../../api.html#illumination.illustrations.IllustrationBase.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Update all the frames in this illustration.</span>
+
+<span class="sd">        *args, **kwargs are passed to the frames&#39; .update()</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_cmap_norm_ticks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remake</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">cmapkw</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Return the cmap and normalization.</span>
+
+<span class="sd">        Make a colorbar for this illustration,</span>
+<span class="sd">        using the first image from every frame.</span>
+
+<span class="sd">        **kwargs are passed to colors.cmap_norm_ticks</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># are the cmap, normalization, and ticks already defined?</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;cmap&#39;</span><span class="p">],</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;norm&#39;</span><span class="p">],</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;ticks&#39;</span><span class="p">])</span>
+
+            <span class="k">assert</span><span class="p">(</span><span class="n">remake</span> <span class="o">==</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">AssertionError</span><span class="p">):</span>
+
+            <span class="c1"># collect all the (first) images</span>
+            <span class="n">firstimages</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">frame</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">firstimages</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">_get_image</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;included </span><span class="si">{}</span><span class="s1"> in the shared color scheme&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">frame</span><span class="p">))</span>
+                <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;found no color scheme data for </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">frame</span><span class="p">))</span>
+
+            <span class="c1"># create the cmap from the given data</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;cmap&#39;</span><span class="p">],</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;norm&#39;</span><span class="p">],</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;ticks&#39;</span><span class="p">])</span> <span class="o">=</span> <span class="n">cmap_norm_ticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">firstimages</span><span class="p">),</span>
+                                                      <span class="o">**</span><span class="n">cmapkw</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;defined color scheme with </span><span class="se">\n</span><span class="s1"> cmap=</span><span class="si">{}</span><span class="se">\n</span><span class="s1"> norm=</span><span class="si">{}</span><span class="se">\n</span><span class="s1"> ticks=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;cmap&#39;</span><span class="p">],</span>
+                                                                                          <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;norm&#39;</span><span class="p">],</span>
+                                                                                          <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;ticks&#39;</span><span class="p">]))</span>
+        <span class="k">return</span>  <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;cmap&#39;</span><span class="p">],</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;norm&#39;</span><span class="p">],</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;ticks&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_add_colorbar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imshowed</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Make a colorbar,</span>
+<span class="sd">        attached to a particular axes</span>
+<span class="sd">        (or multiple axes at once).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        imshowed : the output of plt.imshow</span>
+<span class="sd">                the colorbar will be extracted from this imshow</span>
+<span class="sd">        ax : axes object</span>
+<span class="sd">                this colorbar will be attached to this axes</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="c1"># (this means we have a shared colorbar)</span>
+        <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># pull all the different ax together</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">ax</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">imshowFrame</span><span class="p">)]</span>
+            <span class="c1"># if an imshow doesn&#39;t have its own actual ax, don&#39;t include it</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">ax</span> <span class="k">if</span> <span class="n">a</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;adding a new colorbar for </span><span class="si">{}</span><span class="s1"> frame(s)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ax</span><span class="p">))))</span>
+
+        <span class="c1"># make a colorbar attached to the frame</span>
+        <span class="c1">#	axes =</span>
+        <span class="n">colorbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span>
+            <span class="n">imshowed</span><span class="p">,</span>
+            <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+            <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;horizontal&#39;</span><span class="p">,</span>
+            <span class="c1"># label=self.data.colorbarlabelfordisplay,</span>
+            <span class="n">fraction</span><span class="o">=</span><span class="mf">0.04</span><span class="p">,</span>
+            <span class="n">pad</span><span class="o">=</span><span class="mf">0.08</span><span class="p">,</span>
+            <span class="n">ticks</span><span class="o">=</span><span class="n">ticks</span><span class="p">)</span>
+
+        <span class="c1"># colorbarred = plt.colorbar(self.plotted[&#39;image&#39;], ax=axes, orientation=&#39;horizontal&#39;, label=self.data.colorbarlabelfordisplay, fraction=0.04, pad=0.07, ticks=ticks)</span>
+        <span class="n">colorbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span>
+            <span class="p">[</span><span class="s1">&#39;</span><span class="si">{:.0f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ticks</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+        <span class="n">colorbar</span><span class="o">.</span><span class="n">outline</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">colorbar</span>
+
+    <span class="k">def</span> <span class="nf">_condense_timelabels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Remove all but a single time label.</span>
+<span class="sd">        Don&#39;t do this if you have staggered time-series.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="c1"># remove all but the lower left time indicator</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="s1">&#39;time&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">plotingredients</span><span class="p">:</span>
+                <span class="c1"># remove the time label</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">plotingredients</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+                <span class="n">N</span> <span class="o">+=</span><span class="mi">1</span>
+
+                <span class="c1"># keep track of whether this is the lower left corner</span>
+                <span class="n">bbox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">get_position</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">bbox</span><span class="o">.</span><span class="n">x0</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="ow">and</span> <span class="n">bbox</span><span class="o">.</span><span class="n">y0</span> <span class="o">&lt;=</span><span class="n">y</span><span class="p">:</span>
+                    <span class="n">corner</span> <span class="o">=</span> <span class="n">k</span>
+                    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">bbox</span><span class="o">.</span><span class="n">x0</span><span class="p">,</span> <span class="n">bbox</span><span class="o">.</span><span class="n">y0</span>
+
+        <span class="c1"># add a time to the lower left corner</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="n">corner</span><span class="p">]</span><span class="o">.</span><span class="n">plotingredients</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;condensing </span><span class="si">{}</span><span class="s1"> time labels into 1&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+
+<div class="viewcode-block" id="IllustrationBase.savefig"><a class="viewcode-back" href="../../../api.html#illumination.illustrations.IllustrationBase.savefig">[docs]</a>    <span class="k">def</span> <span class="nf">savefig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="o">**</span><span class="n">savefigkw</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Call plt.savefig, but make an announcement about it.</span>
+<span class="sd">        This should be called after illustration.plot()</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        filename : str</span>
+<span class="sd">            Where should the figure be saved?</span>
+
+<span class="sd">        **savefigkw are passed to savefig</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;saving figure to </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="o">**</span><span class="n">savefigkw</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;saved figure to </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="IllustrationBase.animate"><a class="viewcode-back" href="../../../api.html#illumination.illustrations.IllustrationBase.animate">[docs]</a>    <span class="k">def</span> <span class="nf">animate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;test.mp4&#39;</span><span class="p">,</span>
+                      <span class="n">mintime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxtimespan</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cadence</span><span class="o">=</span><span class="mi">1</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">s</span><span class="p">,</span>
+                      <span class="n">fps</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create an animation from an Illustration,</span>
+<span class="sd">        using the time axes associated with each frame.</span>
+
+<span class="sd">        This should be called after illustration.plot()</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        filename : str</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hasbeenplotted</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+
+        <span class="c1"># figure out the times to display</span>
+        <span class="k">if</span> <span class="n">mintime</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">actualtimes</span><span class="p">,</span> <span class="n">actualcadence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timesandcadence</span><span class="p">(</span>
+                <span class="nb">round</span><span class="o">=</span><span class="n">cadence</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">lower</span><span class="p">,</span> <span class="n">upper</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">actualtimes</span><span class="o">.</span><span class="n">gps</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span>
+                <span class="n">actualtimes</span><span class="o">.</span><span class="n">gps</span><span class="p">)</span> <span class="o">+</span> <span class="n">actualcadence</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lower</span> <span class="o">=</span> <span class="n">mintime</span><span class="o">.</span><span class="n">gps</span>
+            <span class="n">upper</span> <span class="o">=</span> <span class="n">lower</span> <span class="o">+</span> <span class="n">maxtimespan</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="k">if</span> <span class="n">cadence</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cadence</span> <span class="o">=</span> <span class="n">actualcadence</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># np.maximum(cadence.to(&#39;s&#39;).value, actualcadence.to(&#39;s&#39;).value)</span>
+            <span class="n">cadence</span> <span class="o">=</span> <span class="n">cadence</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="k">if</span> <span class="n">maxtimespan</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">upper</span> <span class="o">=</span> <span class="n">lower</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">upper</span> <span class="o">-</span> <span class="n">lower</span><span class="p">,</span> <span class="n">maxtimespan</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">,</span> <span class="n">cadence</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;about to animate </span><span class="si">{}</span><span class="s1"> times at </span><span class="si">{}</span><span class="s1">s cadence for </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">),</span> <span class="n">cadence</span><span class="p">,</span> <span class="bp">self</span><span class="p">))</span>
+
+        <span class="c1"># get the writer</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="n">get_writer</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;the animation will be saved to </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="c1"># set up the animation writer</span>
+        <span class="k">with</span> <span class="n">writer</span><span class="o">.</span><span class="n">saving</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="p">,</span>
+                           <span class="n">filename</span><span class="p">,</span>
+                           <span class="n">dpi</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">get_dpi</span><span class="p">()):</span>
+
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;  </span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1"> at </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">),</span> <span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">iso</span><span class="p">),</span> <span class="n">progress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+                <span class="c1"># update the illustration to a new time</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Time</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;gps&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;tdb&#39;</span><span class="p">))</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">grab_frame</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;the animation is finished!&#39;</span><span class="p">)</span></div></div>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">class Row(IllustrationBase):</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+<span class="sd">	FIXME -- the initialization is probably still sketchy on this.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+
+<span class="sd">	def __init__(self, *frameargs, **framekwargs):</span>
+
+<span class="sd">		# store all the frames in a dictionary</span>
+<span class="sd">		self.frames = {}</span>
+<span class="sd">		for i, a in enumerate(frameargs):</span>
+<span class="sd">			self.frames[i] = a</span>
+
+<span class="sd">		for i, k in enumerate(framekwargs.keys()):</span>
+<span class="sd">			self.frames[k] = framekwargs[k]</span>
+
+<span class="sd">		# set up the geometry of the figure</span>
+<span class="sd">		self.orientation = &#39;horizontal&#39;</span>
+<span class="sd">		cols = len(self.frames)</span>
+<span class="sd">		rows = 1</span>
+<span class="sd">		IllustrationBase.__init__(self, rows, cols,</span>
+<span class="sd">								hspace=0.02, wspace=0.02,</span>
+<span class="sd">								left=0.05, right=0.95,</span>
+<span class="sd">								bottom=0.1, top=0.9)</span>
+
+<span class="sd">		# initiate the axes for each camera</span>
+<span class="sd">		keys = list(range(len(frameargs))) + list(framekwargs.keys())</span>
+<span class="sd">		for j, k in enumerate(keys):</span>
+
+<span class="sd">			# populate the axes on the main camera grid</span>
+<span class="sd">			ax = plt.subplot(self.grid[0, j])</span>
+<span class="sd">			self.frames[k].ax = ax</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basics.html">Basic Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Zach Berta-Thompson.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>illumination.frames.LocalZoomFrame &#8212; illumination 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for illumination.frames.LocalZoomFrame</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">.ZoomFrame</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">astropy.nddata.utils</span> <span class="k">import</span> <span class="n">Cutout2D</span>
+<span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="k">import</span> <span class="n">Rectangle</span>
+
+
+<div class="viewcode-block" id="LocalZoomFrame"><a class="viewcode-back" href="../../../api.html#illumination.frames.LocalZoomFrame">[docs]</a><span class="k">class</span> <span class="nc">LocalZoomFrame</span><span class="p">(</span><span class="n">ZoomFrame</span><span class="p">):</span>
+    <span class="n">frametype</span> <span class="o">=</span> <span class="s1">&#39;Zoom&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">zoom</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initialize a ZoomFrame that can display</span>
+<span class="sd">        images taken from a zoomed subset of</span>
+<span class="sd">        a `source` imshowFrame. This is kind</span>
+<span class="sd">        of like a magnifying class you can</span>
+<span class="sd">        drop down on an image.</span>
+
+<span class="sd">        It *doesn&#39;t* add a new axis.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        source : imshowFrame</span>
+<span class="sd">                A frame into which this one will be zooming.</span>
+
+<span class="sd">        position : (tuple)</span>
+<span class="sd">                The (x, y) = (col, row) position of the center of zoom.</span>
+<span class="sd">                (These are in original image coordinates,</span>
+<span class="sd">                not those that have been transformed for display.)</span>
+
+<span class="sd">        shape : (tuple)</span>
+<span class="sd">                The (x, y) = (ncols, nrows) shape of the zoom.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">ZoomFrame</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>  <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">includes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zoom</span> <span class="o">=</span> <span class="n">zoom</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">titlefordisplay</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> | </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frametype</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_times</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Get the available times associated with this frame.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">_get_times</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_find_timestep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Get the timestep, by using the source frame.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">_find_timestep</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Get the image at a given time (defaulting to the first time),</span>
+<span class="sd">        by pulling it from the source frame.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="c1"># get the image, transform to the rotated camera frame</span>
+        <span class="n">transformedbigimage</span><span class="p">,</span> <span class="n">actual_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">_get_image</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+
+        <span class="c1"># get the position of this stamp, transformed to the rotated camera frame</span>
+        <span class="n">transformedxy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">_transformxy</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cutout</span> <span class="o">=</span> <span class="n">Cutout2D</span><span class="p">(</span><span class="n">transformedbigimage</span><span class="p">,</span>
+                               <span class="n">transformedxy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;partial&#39;</span><span class="p">)</span>
+
+        <span class="c1"># all coordinates for the cutout are now in the transformed coordinates</span>
+        <span class="n">cutoutimage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="o">.</span><span class="n">data</span>
+        <span class="k">return</span> <span class="n">cutoutimage</span><span class="p">,</span> <span class="n">actual_time</span>
+
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Generate the (initial) plot for this local zoom frame.</span>
+
+<span class="sd">        Individual features can be modified afterwards,</span>
+<span class="sd">        through the .ax (the plotted axes) or the .plotted</span>
+<span class="sd">        (dictionary of plotted elements) attributes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        time : astropy Time</span>
+<span class="sd">            The time to plot, defaults to the first with None.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="c1"># pull out the array to work on</span>
+        <span class="n">image</span><span class="p">,</span> <span class="n">actual_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_image</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+
+        <span class="c1"># extract the cmap from the source image</span>
+        <span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="p">,</span> <span class="n">ticks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">_cmap_norm_ticks</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+
+
+        <span class="c1"># these are in the rotated camera frame</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="o">.</span><span class="n">center_original</span>
+        <span class="n">ysize</span><span class="p">,</span> <span class="n">xsize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">xsize</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">zoom</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">xsize</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">zoom</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">bottom</span><span class="p">,</span> <span class="n">top</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">ysize</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">zoom</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">ysize</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">zoom</span> <span class="o">/</span> <span class="mi">2</span>
+
+        <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">top</span><span class="p">]</span>
+
+        <span class="n">zooms</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">illustration</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                 <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">illustration</span><span class="o">.</span><span class="n">frames</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="s1">&#39;zoom&#39;</span> <span class="ow">in</span> <span class="n">k</span><span class="p">]</span>
+        <span class="n">zorder</span> <span class="o">=</span> <span class="n">zooms</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">,</span>
+                                                     <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span>
+                                                     <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span>
+                                                     <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span>
+                                                     <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+                                                     <span class="n">zorder</span><span class="o">=</span><span class="n">zorder</span><span class="p">)</span>
+
+        <span class="c1"># reate a Rectangle patch</span>
+        <span class="n">rect</span> <span class="o">=</span> <span class="n">Rectangle</span><span class="p">((</span><span class="n">left</span><span class="p">,</span> <span class="n">bottom</span><span class="p">),</span> <span class="n">xsize</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">zoom</span><span class="p">,</span> <span class="n">ysize</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">zoom</span><span class="p">,</span>
+                         <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span>
+                         <span class="n">zorder</span><span class="o">=</span><span class="n">zorder</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">clip_on</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Add the patch to the Axes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;boxonzoom&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_clip_on</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># add a box to the source image (cutout must have ben created, if plot has happened)</span>
+        <span class="c1">#boxonoriginal = self.cutout.plot_on_original(ax=self.source.ax, clip_on=True)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">timestep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_timestep</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">timestep</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">currenttimestep</span> <span class="o">=</span> <span class="n">timestep</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Update this frame to a particular time (for use in animations).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># update the data, if we need to</span>
+        <span class="n">timestep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_timestep</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="n">image</span><span class="p">,</span> <span class="n">actual_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_image</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">timestep</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">currenttimestep</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="s1">&#39;time&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">:</span>
+                <span class="n">timestring</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">_timestring</span><span class="p">(</span><span class="n">actual_time</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="n">timestring</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">currenttimestep</span> <span class="o">=</span> <span class="n">timestep</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basics.html">Basic Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Zach Berta-Thompson.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

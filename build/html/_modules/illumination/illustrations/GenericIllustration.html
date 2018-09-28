@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>illumination.illustrations.GenericIllustration &#8212; illumination 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for illumination.illustrations.GenericIllustration</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">.IllustrationBase</span> <span class="k">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="GenericIllustration"><a class="viewcode-back" href="../../../api.html#illumination.illustrations.GenericIllustration">[docs]</a><span class="k">class</span> <span class="nc">GenericIllustration</span><span class="p">(</span><span class="n">IllustrationBase</span><span class="p">):</span>
+    <span class="n">illustrationtype</span> <span class="o">=</span> <span class="s1">&#39;Generic&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>  <span class="n">imshows</span><span class="o">=</span><span class="p">[],</span>
+                        <span class="n">timeseries</span><span class="o">=</span><span class="p">[],</span>
+                        <span class="n">imshowheight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                        <span class="n">imshowrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                        <span class="n">sizescale</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                        <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">dpi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">hspace</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span>
+                        <span class="n">wspace</span> <span class="o">=</span> <span class="mf">0.08</span><span class="p">,</span>
+                        <span class="n">left</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+                        <span class="n">right</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
+                        <span class="n">bottom</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                        <span class="n">top</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+                        <span class="o">**</span><span class="n">illkw</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initialize an illustration from list of frames.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        imshows : list</span>
+<span class="sd">            A list of imshow frames, to be displayed in a row on the top.</span>
+
+<span class="sd">        timeseries : list</span>
+<span class="sd">            A list of timeseries frames, to be displayed in rows below.</span>
+
+<span class="sd">        imshowheight : float</span>
+<span class="sd">            How tall is the imshow, compared to the entire timeseries block?</span>
+
+<span class="sd">        sizescale : float</span>
+<span class="sd">            An overall size scale, in inches.</span>
+
+<span class="sd">        figsize : tuple</span>
+<span class="sd">            Override the automated figure size with your own, in inches.</span>
+
+<span class="sd">        **illkw keywords are passed to IllustrationBase</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="c1"># one row for imshows + one for each timeseries</span>
+        <span class="n">hasimshow</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">imshows</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">hastimeseries</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">timeseries</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># one column for each imshow</span>
+        <span class="n">imshowcols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">imshows</span><span class="p">))</span><span class="o">/</span><span class="n">imshowrows</span><span class="p">)),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="n">hasimshow</span> <span class="o">*</span> <span class="n">imshowrows</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">timeseries</span><span class="p">)</span> <span class="o">+</span> <span class="n">hastimeseries</span>
+        <span class="n">cols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">imshowcols</span><span class="p">)</span>
+
+        <span class="c1"># use the frame aspect ratios to set the width ratios</span>
+        <span class="n">width_ratios</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">aspectratio</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">imshows</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">imshowcols</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">width_ratios</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">width_ratios</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># set the height ratios, including a gap between imshows and timeseries</span>
+        <span class="n">height_ratios</span> <span class="o">=</span> <span class="p">(</span>   <span class="n">hasimshow</span> <span class="o">*</span> <span class="n">imshowrows</span> <span class="o">*</span> <span class="p">[</span><span class="n">imshowheight</span><span class="p">]</span> <span class="o">+</span>
+                            <span class="n">hastimeseries</span> <span class="o">*</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">]</span> <span class="o">+</span>
+                            <span class="nb">len</span><span class="p">(</span><span class="n">timeseries</span><span class="p">)</span> <span class="o">*</span> <span class="p">[</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">timeseries</span><span class="p">))])</span>
+
+        <span class="c1"># set the sizes, trying to keep square imshows square</span>
+        <span class="n">wsize</span> <span class="o">=</span> <span class="n">sizescale</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">width_ratios</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">cols</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">wspace</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span>
+        <span class="n">hsize</span> <span class="o">=</span> <span class="n">sizescale</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">height_ratios</span><span class="p">)</span> <span class="o">*</span> \
+            <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">rows</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">hspace</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">top</span> <span class="o">-</span> <span class="n">bottom</span><span class="p">)</span>
+
+        <span class="c1"># allow the user to overwrite the automatic figure size</span>
+        <span class="n">figkw</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="n">figsize</span> <span class="ow">or</span> <span class="p">(</span><span class="n">wsize</span><span class="p">,</span> <span class="n">hsize</span><span class="p">)),</span>
+                     <span class="n">dpi</span><span class="o">=</span><span class="kc">None</span> <span class="ow">or</span> <span class="mi">100</span><span class="p">)</span>
+
+        <span class="c1"># create a illustration to match this geometry</span>
+        <span class="n">IllustrationBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span>
+                                  <span class="n">figkw</span><span class="o">=</span><span class="n">figkw</span><span class="p">,</span>
+                                  <span class="n">hspace</span><span class="o">=</span><span class="n">hspace</span><span class="p">,</span> <span class="n">wspace</span><span class="o">=</span><span class="n">wspace</span><span class="p">,</span>
+                                  <span class="n">left</span><span class="o">=</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="n">right</span><span class="p">,</span>
+                                  <span class="n">bottom</span><span class="o">=</span><span class="n">bottom</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="n">top</span><span class="p">,</span>
+                                  <span class="n">height_ratios</span><span class="o">=</span><span class="n">height_ratios</span><span class="p">,</span>
+                                  <span class="n">width_ratios</span><span class="o">=</span><span class="n">width_ratios</span><span class="p">,</span>
+                                  <span class="o">**</span><span class="n">illkw</span><span class="p">)</span>
+
+        <span class="c1"># add the imshows to the illustration</span>
+        <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">imshows</span><span class="p">):</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="n">count</span> <span class="o">//</span> <span class="n">imshowcols</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="n">count</span> <span class="o">%</span> <span class="n">imshowcols</span>
+
+            <span class="c1"># make sure to connect the frame back to this illustration</span>
+            <span class="n">i</span><span class="o">.</span><span class="n">illustration</span> <span class="o">=</span> <span class="bp">self</span>
+
+            <span class="c1"># create the axes in which this should sit</span>
+            <span class="n">i</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">])</span>
+
+            <span class="c1"># register this in the frames dictionary</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span>
+                <span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="p">:</span>
+                    <span class="n">n</span> <span class="o">+=</span> <span class="s1">&#39;-</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+
+        <span class="c1"># add the timeseries to the illustration</span>
+        <span class="n">sharex</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># you may want to change the shared axes for different visualizations</span>
+        <span class="k">for</span> <span class="n">row</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">timeseries</span><span class="p">):</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="c1"># make sure to connect the frame back to this illustration</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">illustration</span> <span class="o">=</span> <span class="bp">self</span>
+            <span class="c1"># create the axes in which this should sit</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">row</span> <span class="o">+</span> <span class="n">hasimshow</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="n">sharex</span><span class="o">=</span><span class="n">sharex</span><span class="p">)</span>
+            <span class="n">sharex</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">ax</span>
+
+            <span class="c1"># turn off the axis labels</span>
+            <span class="k">if</span> <span class="n">row</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">timeseries</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span> <span class="n">visible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="c1"># register this in the frames dictionary</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">name</span>
+                <span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="p">:</span>
+                    <span class="n">n</span> <span class="o">+=</span> <span class="s1">&#39;-</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="p">(</span><span class="n">row</span> <span class="o">+</span> <span class="n">hasimshow</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basics.html">Basic Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Zach Berta-Thompson.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

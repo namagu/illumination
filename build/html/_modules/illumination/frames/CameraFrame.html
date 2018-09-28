@@ -1,0 +1,231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>illumination.frames.CameraFrame &#8212; illumination 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for illumination.frames.CameraFrame</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">.imshowFrame</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="k">import</span> <span class="n">SymLogNorm</span><span class="p">,</span> <span class="n">LogNorm</span>
+
+<div class="viewcode-block" id="CameraFrame"><a class="viewcode-back" href="../../../api.html#illumination.frames.CameraFrame">[docs]</a><span class="k">class</span> <span class="nc">CameraFrame</span><span class="p">(</span><span class="n">imshowFrame</span><span class="p">):</span>
+    <span class="n">frametype</span> <span class="o">=</span> <span class="s1">&#39;camera&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;camera&#39;</span><span class="p">,</span>
+                       <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="o">**</span><span class="n">framekw</span><span class="p">):</span>
+
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initialize a CameraFrame. For plotting, this</span>
+<span class="sd">        expects to see a full-frame image from a full</span>
+<span class="sd">        camera (not split into CCDs.)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        name : str</span>
+<span class="sd">            A name to give this Frame.</span>
+
+<span class="sd">        ax : matplotlib.axes.Axes instance</span>
+<span class="sd">            All plotting will happen inside this ax.</span>
+<span class="sd">            If set to None, the `self.ax attribute` will</span>
+<span class="sd">            need to be set manually before plotting.</span>
+
+<span class="sd">        data : Image_Sequence</span>
+<span class="sd">            Any Sequence that contains 2D images.</span>
+
+<span class="sd">        **framekw : dict</span>
+<span class="sd">            Passed to imshowFrame;</span>
+<span class="sd">            check it out for more options.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="c1"># initialize the imshow frame</span>
+        <span class="n">imshowFrame</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">framekw</span><span class="p">)</span>
+
+        <span class="c1"># set up the basic geometry</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymin</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># if there&#39;s an image, use it to set the size</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ymax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">IndexError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="c1"># allow us to create an empty image</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ymax</span> <span class="o">=</span> <span class="mi">4156</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span> <span class="o">=</span> <span class="mi">4272</span>
+
+        <span class="c1"># by default, this camera frame doesn&#39;t do any transformation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transpose</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flipy</span>     <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flipx</span>     <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">_transformimage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        horizontal:</span>
+<span class="sd">                (should be) +x is up, +y is left</span>
+<span class="sd">                (looks like) +x is up, +y is right</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_orientation</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;horizontal&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">transpose</span><span class="p">:</span>
+                <span class="n">displayimage</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">T</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">displayimage</span> <span class="o">=</span> <span class="n">image</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">flipy</span><span class="p">:</span>
+                <span class="n">displayimage</span> <span class="o">=</span> <span class="n">displayimage</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">flipx</span><span class="p">:</span>
+                <span class="n">displayimage</span> <span class="o">=</span> <span class="n">displayimage</span><span class="p">[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Sorry! No orientations besides &#39;horizontal&#39; have been defined yet!&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">displayimage</span>
+
+    <span class="k">def</span> <span class="nf">_transformxy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This handles the same transformation as that which goes into</span>
+<span class="sd">        transform image, but for x and y arrays.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_orientation</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;horizontal&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">transpose</span><span class="p">:</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">flipx</span><span class="p">:</span>
+                    <span class="n">displayx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">y</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">displayx</span> <span class="o">=</span> <span class="n">y</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">flipy</span><span class="p">:</span>
+                    <span class="n">displayy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">x</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">displayy</span> <span class="o">=</span> <span class="n">x</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">flipx</span><span class="p">:</span>
+                    <span class="n">displayx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">x</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">displayx</span> <span class="o">=</span> <span class="n">x</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">flipy</span><span class="p">:</span>
+                    <span class="n">displayy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">y</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">displayy</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Sorry! No orientations besides &#39;horizontal&#39; have been defined yet!&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">displayx</span><span class="p">,</span> <span class="n">displayy</span></div>
+
+
+<span class="k">class</span> <span class="nc">Camera1Frame</span><span class="p">(</span><span class="n">CameraFrame</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;cam1&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">CameraFrame</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transpose</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flipy</span>     <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flipx</span>     <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">class</span> <span class="nc">Camera2Frame</span><span class="p">(</span><span class="n">Camera1Frame</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;cam2&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">Camera1Frame</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Camera3Frame</span><span class="p">(</span><span class="n">CameraFrame</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;cam3&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">CameraFrame</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transpose</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flipy</span>     <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flipx</span>     <span class="o">=</span> <span class="kc">True</span>
+
+<span class="k">class</span> <span class="nc">Camera4Frame</span><span class="p">(</span><span class="n">Camera3Frame</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;cam4&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">Camera3Frame</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="c1"># define a dictionary, so these cameras are easier to access</span>
+<span class="n">cameras</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;camera&#39;</span><span class="p">:</span> <span class="n">CameraFrame</span><span class="p">,</span>
+            <span class="s1">&#39;cam1&#39;</span>  <span class="p">:</span> <span class="n">Camera1Frame</span><span class="p">,</span>
+            <span class="s1">&#39;cam2&#39;</span>  <span class="p">:</span> <span class="n">Camera2Frame</span><span class="p">,</span>
+            <span class="s1">&#39;cam3&#39;</span>  <span class="p">:</span> <span class="n">Camera3Frame</span><span class="p">,</span>
+            <span class="s1">&#39;cam4&#39;</span>  <span class="p">:</span> <span class="n">Camera4Frame</span><span class="p">}</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basics.html">Basic Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Zach Berta-Thompson.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,483 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>illumination.frames.imshowFrame &#8212; illumination 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for illumination.frames.imshowFrame</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">.FrameBase</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">..colors</span> <span class="k">import</span> <span class="n">cmap_norm_ticks</span>
+<span class="kn">from</span> <span class="nn">..sequences</span> <span class="k">import</span> <span class="n">make_sequence</span>
+
+
+<div class="viewcode-block" id="imshowFrame"><a class="viewcode-back" href="../../../api.html#illumination.frames.imshowFrame">[docs]</a><span class="k">class</span> <span class="nc">imshowFrame</span><span class="p">(</span><span class="n">FrameBase</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    An imshow frame can show a sequence of images, as an imshow.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c1"># what is the type of this frame?</span>
+    <span class="n">frametype</span> <span class="o">=</span> <span class="s1">&#39;imshow&#39;</span>
+
+    <span class="c1"># what are the coordinate limits?</span>
+    <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">name</span><span class="o">=</span><span class="s1">&#39;image&#39;</span><span class="p">,</span>
+                 <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">plotingredients</span><span class="o">=</span><span class="p">[</span>  <span class="s1">&#39;image&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;time&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;colorbar&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;arrows&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;title&#39;</span><span class="p">],</span> <span class="c1"># other options might be &#39;filename&#39;, &#39;axes&#39;, what else?</span>
+                 <span class="n">processingsteps</span><span class="o">=</span><span class="p">[],</span>
+                 <span class="n">firstframe</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">cmapkw</span><span class="o">=</span><span class="p">{},</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initialize this imshowFrame, will can show a sequence of 2D images.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        name : str</span>
+<span class="sd">            A name to give this Frame.</span>
+
+<span class="sd">        ax : matplotlib.axes.Axes instance</span>
+<span class="sd">            All plotting will happen inside this ax.</span>
+<span class="sd">            If set to None, the `self.ax attribute` will</span>
+<span class="sd">            need to be set manually before plotting.</span>
+
+<span class="sd">        data : Image_Sequence</span>
+<span class="sd">            Any Sequence that contains 2D images.</span>
+
+<span class="sd">        title : str</span>
+<span class="sd">            A string to display as the title of this frame.</span>
+<span class="sd">            If nothing, this will try to pull a title out</span>
+<span class="sd">            of the data, or leave it blank.</span>
+
+<span class="sd">        plotingredients : list</span>
+<span class="sd">            A list of keywords indicating features that will be</span>
+<span class="sd">            plotted in this frame. It can be modified either now</span>
+<span class="sd">            when initializing the frame, or any time before</span>
+<span class="sd">            calling `i.plot()` from the illustration.</span>
+
+<span class="sd">        cmapkw : dict</span>
+<span class="sd">            Dictionary of keywords to feed into the cmap generation.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="c1"># initialize the frame base</span>
+        <span class="n">FrameBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+                                 <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                                 <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+                                 <span class="n">plotingredients</span><span class="o">=</span><span class="n">plotingredients</span><span class="p">,</span>
+                                 <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># ensure that the data are a sequence of images</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">make_sequence</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># if there&#39;s an image, use it to set the size</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymin</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ymax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">IndexError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="k">pass</span>
+
+        <span class="c1"># try to figure out a title for the imshowFrame</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">titlefordisplay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">titlefordisplay</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">titlefordisplay</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">titlefordisplay</span> <span class="o">=</span> <span class="n">title</span>
+
+        <span class="c1"># keep track of an extra keywords for generating the cmaps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmapkw</span> <span class="o">=</span> <span class="n">cmapkw</span>
+
+        <span class="c1"># are there steps to apply to the image before displaying?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">processingsteps</span> <span class="o">=</span> <span class="n">processingsteps</span>
+
+        <span class="c1"># should we plot something special for the first frame?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">firstframe</span> <span class="o">=</span> <span class="n">firstframe</span>
+
+    <span class="k">def</span> <span class="nf">_cmap_norm_ticks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">cmapkw</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Return the cmap and normalization.</span>
+
+<span class="sd">        If the illustration has shared colorbar,</span>
+<span class="sd">        then use the cmap and norm from there.</span>
+
+<span class="sd">        Otherwise, make a colorbar for this frame.</span>
+
+<span class="sd">        *args and **kwargs are passed to colors.cmap_norm_ticks</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">illustration</span><span class="o">.</span><span class="n">sharecolorbar</span><span class="p">:</span>
+            <span class="c1"># pull the cmap and normalization from the illustration</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;cmap&#39;</span><span class="p">],</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;norm&#39;</span><span class="p">],</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;ticks&#39;</span><span class="p">])</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">illustration</span><span class="o">.</span><span class="n">_cmap_norm_ticks</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">illustration</span><span class="o">.</span><span class="n">cmapkw</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;cmap&#39;</span><span class="p">],</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;norm&#39;</span><span class="p">],</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;ticks&#39;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># use already-defined properties, or make new ones</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span>  <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;cmap&#39;</span><span class="p">],</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;norm&#39;</span><span class="p">],</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;ticks&#39;</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+
+                <span class="c1"># create the cmap from the given data</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;cmap&#39;</span><span class="p">],</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;norm&#39;</span><span class="p">],</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;ticks&#39;</span><span class="p">])</span> <span class="o">=</span> <span class="n">cmap_norm_ticks</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">cmapkw</span><span class="p">)</span>
+
+                <span class="k">return</span>  <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;cmap&#39;</span><span class="p">],</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;norm&#39;</span><span class="p">],</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;ticks&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_ensure_colorbar_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Make sure this axes has its colorbar created.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        image : the output returned from imshow</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># do we use a shared colorbar for the whole illustration?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">illustration</span><span class="o">.</span><span class="n">sharecolorbar</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;making sure a shared colorbar is set up for </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># if the illustration already has a colorbar, don&#39;t remake</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">illustration</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;colorbar&#39;</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="c1"># if the illustration needs a colorbar, make one!</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;added a shared colorbar for </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">illustration</span><span class="p">))</span>
+
+                <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">illustration</span><span class="o">.</span><span class="n">_add_colorbar</span><span class="p">(</span><span class="n">image</span><span class="p">,</span>
+                                                    <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                                    <span class="n">ticks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;ticks&#39;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">illustration</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;colorbar&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">illustration</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;colorbar&#39;</span><span class="p">]</span>
+        <span class="c1"># or do we just give this one frame its own colorbar?</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;making sure a unique colorbar is set up for </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+            <span class="k">try</span><span class="p">:</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;colorbar&#39;</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;added a unique colorbar for </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+
+                <span class="c1"># create a colorbar for this illustration</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">illustration</span><span class="o">.</span><span class="n">_add_colorbar</span><span class="p">(</span><span class="n">image</span><span class="p">,</span>
+                                                    <span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">,</span>
+                                                    <span class="n">ticks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;ticks&#39;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;colorbar&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;colorbar&#39;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="imshowFrame.draw_arrows"><a class="viewcode-back" href="../../../api.html#illumination.frames.imshowFrame.draw_arrows">[docs]</a>    <span class="k">def</span> <span class="nf">draw_arrows</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">ratio</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Draw arrows on this Frame, to indicate</span>
+<span class="sd">        the +x and +y directions.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        origin : tuple</span>
+<span class="sd">            The (x,y) coordinates of the corner of the arrows.</span>
+<span class="sd">        ratio : float</span>
+<span class="sd">            What fraction of the (longest) axis should the arrows span?</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+
+        <span class="c1"># figure out the length of the arrows (in data units)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">xspan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xmax</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmin</span><span class="p">)</span>
+            <span class="n">yspan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ymax</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymin</span><span class="p">)</span>
+            <span class="n">length</span> <span class="o">=</span> <span class="n">ratio</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">xspan</span><span class="p">,</span> <span class="n">yspan</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">length</span> <span class="o">=</span> <span class="mi">50</span>
+
+        <span class="c1"># store the arrows in a dictionary</span>
+        <span class="n">arrows</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># rotate into the display coordinates</span>
+        <span class="n">unrotatedx</span><span class="p">,</span> <span class="n">unrotatedy</span> <span class="o">=</span> <span class="n">origin</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transformxy</span><span class="p">(</span><span class="o">*</span><span class="n">origin</span><span class="p">)</span>
+        <span class="n">arrow_kw</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">zorder</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">length</span> <span class="o">*</span> <span class="mf">0.03</span><span class="p">,</span> <span class="n">head_width</span><span class="o">=</span><span class="n">length</span> <span class="o">*</span>
+                        <span class="mf">0.3</span><span class="p">,</span> <span class="n">head_length</span><span class="o">=</span><span class="n">length</span> <span class="o">*</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">clip_on</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">length_includes_head</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">text_kw</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
+                       <span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">clip_on</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="mf">1.4</span>
+
+        <span class="c1"># +x arrow</span>
+        <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_transformxy</span><span class="p">(</span><span class="n">unrotatedx</span> <span class="o">+</span> <span class="n">length</span><span class="p">,</span> <span class="n">unrotatedy</span><span class="p">))</span> <span class="o">-</span> \
+            <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_transformxy</span><span class="p">(</span><span class="n">unrotatedx</span><span class="p">,</span> <span class="n">unrotatedy</span><span class="p">))</span>
+        <span class="n">arrows</span><span class="p">[</span><span class="s1">&#39;xarrow&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">arrow</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="o">**</span><span class="n">arrow_kw</span><span class="p">)</span>
+        <span class="n">xtextx</span><span class="p">,</span> <span class="n">xtexty</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transformxy</span><span class="p">(</span>
+            <span class="n">unrotatedx</span> <span class="o">+</span> <span class="n">length</span> <span class="o">*</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">unrotatedy</span><span class="p">)</span>
+        <span class="n">arrows</span><span class="p">[</span><span class="s1">&#39;xarrowlabel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">xtextx</span><span class="p">,</span> <span class="n">xtexty</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">text_kw</span><span class="p">)</span>
+
+        <span class="c1"># +y arrow</span>
+        <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_transformxy</span><span class="p">(</span><span class="n">unrotatedx</span><span class="p">,</span> <span class="n">unrotatedy</span> <span class="o">+</span> <span class="n">length</span><span class="p">))</span> <span class="o">-</span> \
+            <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_transformxy</span><span class="p">(</span><span class="n">unrotatedx</span><span class="p">,</span> <span class="n">unrotatedy</span><span class="p">))</span>
+        <span class="n">arrows</span><span class="p">[</span><span class="s1">&#39;yarrow&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">arrow</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="o">**</span><span class="n">arrow_kw</span><span class="p">)</span>
+        <span class="n">ytextx</span><span class="p">,</span> <span class="n">ytexty</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transformxy</span><span class="p">(</span>
+            <span class="n">unrotatedx</span><span class="p">,</span> <span class="n">unrotatedy</span> <span class="o">+</span> <span class="n">length</span> <span class="o">*</span> <span class="n">buffer</span><span class="p">)</span>
+        <span class="n">arrows</span><span class="p">[</span><span class="s1">&#39;yarrowlabel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">ytextx</span><span class="p">,</span> <span class="n">ytexty</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">text_kw</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">arrows</span></div>
+
+<div class="viewcode-block" id="imshowFrame.plot"><a class="viewcode-back" href="../../../api.html#illumination.frames.imshowFrame.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Generate the (initial) plot for this frame.</span>
+
+<span class="sd">        Individual features can be modified afterwards,</span>
+<span class="sd">        through the .ax (the plotted axes) or the .plotted</span>
+<span class="sd">        (dictionary of plotted elements) attributes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        time : astropy Time</span>
+<span class="sd">            The time to plot, defaults to the first with None.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;plotting </span><span class="si">{}</span><span class="s1"> for the first time&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+        <span class="c1"># make sure we point back at this frame</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">)</span>
+
+        <span class="c1"># kind of a kludge (to make the plots and cmaps reset)?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># pull out the array to work on</span>
+        <span class="n">image</span><span class="p">,</span> <span class="n">actual_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_image</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+
+        <span class="c1"># plot the image, as an imshow</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;image&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotingredients</span><span class="p">):</span><span class="c1"># and (image is not None):</span>
+
+            <span class="c1"># pull out the cmap, normalization, and suggested ticks</span>
+
+            <span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="p">,</span> <span class="n">ticks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cmap_norm_ticks</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">cmapkw</span><span class="p">)</span>
+
+            <span class="c1"># display the image for this frame</span>
+            <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+
+            <span class="c1"># make a stacked image</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">firstframe</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">firstimage</span> <span class="o">=</span> <span class="n">image</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">firstframe</span> <span class="o">==</span> <span class="s1">&#39;median&#39;</span><span class="p">:</span>
+                <span class="c1">#assert(np.size(image) &lt; 10000 or self.data.N &lt; 50)</span>
+                <span class="n">firstimage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span>
+                <span class="n">firstimage</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;added image of shape </span><span class="si">{}</span><span class="s1"> to </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">firstimage</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="bp">self</span><span class="p">))</span>
+
+        <span class="c1"># plot the colorbar</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;colorbar&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotingredients</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;image&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">:</span>
+            <span class="c1"># add the colorbar</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;colorbar&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_colorbar_exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">])</span>
+
+        <span class="c1"># plot some text labeling the time</span>
+        <span class="k">if</span> <span class="s1">&#39;time&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotingredients</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">actual_time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">timelabel</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">timelabel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timestring</span><span class="p">(</span><span class="n">actual_time</span><span class="p">)</span>
+
+            <span class="c1"># add a time label</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+                <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">timelabel</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mf">1e6</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;added time label of &quot;</span><span class="si">{}</span><span class="s1">&quot; on </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">timelabel</span><span class="p">,</span> <span class="bp">self</span><span class="p">))</span>
+
+        <span class="c1"># plot the arrows</span>
+        <span class="k">if</span> <span class="s1">&#39;arrows&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotingredients</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;arrows&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_arrows</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;added arrows on </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+        <span class="c1"># plot a title on this frame</span>
+        <span class="k">if</span> <span class="s1">&#39;title&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotingredients</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">titlefordisplay</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;added title of &quot;</span><span class="si">{}</span><span class="s1">&quot; to </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">titlefordisplay</span><span class="p">,</span> <span class="bp">self</span><span class="p">))</span>
+
+        <span class="c1"># plot lines and ticks for axes only if requested</span>
+        <span class="k">if</span> <span class="s1">&#39;axes&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotingredients</span><span class="p">:</span>
+            <span class="c1"># turn the axes lines off</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+        <span class="c1"># change the x and y limits, if need be</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+
+        <span class="c1"># keep track of the current plotted timestep</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">timestep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_timestep</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">timestep</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">currenttimestep</span> <span class="o">=</span> <span class="n">timestep</span></div>
+
+<div class="viewcode-block" id="imshowFrame.process_image"><a class="viewcode-back" href="../../../api.html#illumination.frames.imshowFrame.process_image">[docs]</a>    <span class="k">def</span> <span class="nf">process_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Apply any extra processing steps to the image</span>
+<span class="sd">        (subract a median image, normalize, mask, ???)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="s1">&#39;subtractmedian&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">processingsteps</span><span class="p">:</span>
+            <span class="n">processedimage</span> <span class="o">=</span> <span class="n">image</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+            <span class="c1">#self.speak(&#39;subtracted median image&#39;)</span>
+        <span class="k">elif</span> <span class="s1">&#39;subtractmean&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">processingsteps</span><span class="p">:</span>
+            <span class="n">processedimage</span> <span class="o">=</span> <span class="n">image</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">processedimage</span> <span class="o">=</span> <span class="n">image</span>
+        <span class="k">return</span> <span class="n">processedimage</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Get the image at a given time (defaulting to the first time).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_times</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">timestep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_timestep</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+            <span class="n">rawimage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">timestep</span><span class="p">]</span>
+            <span class="k">assert</span><span class="p">(</span><span class="n">rawimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+
+            <span class="n">processedimage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_image</span><span class="p">(</span><span class="n">rawimage</span><span class="p">)</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transformimage</span><span class="p">(</span><span class="n">processedimage</span><span class="p">)</span>
+            <span class="n">actual_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_times</span><span class="p">()[</span><span class="n">timestep</span><span class="p">]</span>
+            <span class="c1"># self.speak(&quot; &quot;)</span>
+            <span class="c1"># self.speak(time, timestep)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">IndexError</span><span class="p">,</span> <span class="ne">AssertionError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">image</span><span class="p">,</span> <span class="n">actual_time</span>
+
+    <span class="k">def</span> <span class="nf">_get_alternate_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        The time are still a little kludgy.</span>
+<span class="sd">        (Maybe this isn&#39;t even necessary?)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">includes</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">timestep</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">_find_timestep</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+                <span class="n">actual_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_times</span><span class="p">()[</span><span class="n">timestep</span><span class="p">]</span>
+                <span class="k">break</span>
+            <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">actual_time</span>
+
+<div class="viewcode-block" id="imshowFrame.update"><a class="viewcode-back" href="../../../api.html#illumination.frames.imshowFrame.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Update this frame to a particular time (for use in animations).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># update the data, if we need to</span>
+        <span class="n">timestep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_timestep</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="n">image</span><span class="p">,</span> <span class="n">actual_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_image</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">timestep</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">currenttimestep</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;image&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotingredients</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;time&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotingredients</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_timestring</span><span class="p">(</span><span class="n">actual_time</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">currenttimestep</span> <span class="o">=</span> <span class="n">timestep</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basics.html">Basic Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Zach Berta-Thompson.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

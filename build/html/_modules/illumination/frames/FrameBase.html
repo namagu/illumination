@@ -1,0 +1,339 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>illumination.frames.FrameBase &#8212; illumination 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for illumination.frames.FrameBase</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">..imports</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="FrameBase"><a class="viewcode-back" href="../../../api.html#illumination.frames.FrameBase">[docs]</a><span class="k">class</span> <span class="nc">FrameBase</span><span class="p">(</span><span class="n">Talker</span><span class="p">):</span>
+
+    <span class="n">frametype</span> <span class="o">=</span> <span class="s1">&#39;base&#39;</span>
+    <span class="n">timeunit</span> <span class="o">=</span> <span class="s1">&#39;day&#39;</span>
+    <span class="n">aspectratio</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                    <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">illustration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">plotingredients</span><span class="o">=</span><span class="p">[],</span>
+                    <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initialize this Frame, which can be one (of multiple)</span>
+<span class="sd">        frames in an Illustration. Before plotting, each frame</span>
+<span class="sd">        needs to have an `ax` defined saying where it should be</span>
+<span class="sd">        plotted and (generally) some `data` associated with it.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        name : str</span>
+<span class="sd">            A name to give this Frame.</span>
+
+<span class="sd">        ax : matplotlib.axes.Axes instance</span>
+<span class="sd">            All plotting will happen inside this ax.</span>
+<span class="sd">            If set to None, the `self.ax attribute` will</span>
+<span class="sd">            need to be set manually before plotting.</span>
+
+<span class="sd">        data : flexible</span>
+<span class="sd">            It can be custom object (e.g. a Stamp),</span>
+<span class="sd">            or simple arrays, or a list of HDULists,</span>
+<span class="sd">            or something else, depending on</span>
+<span class="sd">            what this actual Frame does with it</span>
+<span class="sd">            in `plot` and `update`.</span>
+
+<span class="sd">        illustration : an Illustration</span>
+<span class="sd">            The illustration in which this frame will be embedded.</span>
+<span class="sd">            We keep track of this (sometimes) because we might want</span>
+<span class="sd">            information that&#39;s shared across the whole illustration</span>
+<span class="sd">            to be accessible to this individual frame when plotting.</span>
+
+<span class="sd">        plotingredients : list</span>
+<span class="sd">            A list of keywords indicating features that will be</span>
+<span class="sd">            plotted in this frame. It can be modified either now</span>
+<span class="sd">            when initializing the frame, or any time before</span>
+<span class="sd">            calling `i.plot()` from the illustration.</span>
+
+<span class="sd">        **kwargs go nowhere (?)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="c1"># initialize the Talker</span>
+        <span class="n">Talker</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefixformat</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{:&gt;32}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="c1"># store a name for this frame</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+
+        <span class="c1"># assign this frame an axes to sit in</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span>
+
+        <span class="c1"># this is likely a Sequence of some kind</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+
+        <span class="c1"># is there another overarching frame this one should be aware of?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">illustration</span> <span class="o">=</span> <span class="n">illustration</span>
+
+        <span class="c1"># what ingredients should be included when plotting?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plotingredients</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">plotingredients</span><span class="p">)</span>
+
+        <span class="c1"># keep track of a list of frames included in this one (e.g. zooms)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">includes</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># keep track of what&#39;s been plotted</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span> <span class="o">=</span> <span class="p">{}</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">offset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Get a time offset, to use as a zero-point.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        offset : float</span>
+<span class="sd">                An appropriate time zero-point (in JD).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="c1"># is an offset already defined?</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="c1"># is there a minimum of the illustration&#39;s times?</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">illustration</span><span class="o">.</span><span class="n">_get_times</span><span class="p">()</span><span class="o">.</span><span class="n">jd</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+                <span class="c1"># otherwise, use only this frame to estimate the offset</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_times</span><span class="p">()</span><span class="o">.</span><span class="n">jd</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;defining </span><span class="si">{}</span><span class="s1"> as the time offset&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_offset</span><span class="p">))</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span>
+
+    <span class="k">def</span> <span class="nf">_timestring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Return a string, given an input time.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        time : astropy Time</span>
+<span class="sd">                A particular time.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        timestring : str</span>
+<span class="sd">                A string describing the times.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">_timeisfake</span><span class="p">:</span>
+            <span class="n">timestep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_timestep</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s1">&#39;#</span><span class="si">{:.0f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_times</span><span class="p">()[</span><span class="n">timestep</span><span class="p">]</span><span class="o">.</span><span class="n">gps</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">days</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">jd</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">offset</span>
+            <span class="n">inunits</span> <span class="o">=</span> <span class="p">(</span><span class="n">days</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">day</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">timeunit</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s1">&#39;t=</span><span class="si">{:.5f}{:+.5f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">offset</span><span class="p">,</span> <span class="n">inunits</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Default string representation for this frame.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{}</span><span class="s1"> Frame | data=</span><span class="si">{}</span><span class="s1"> | name=</span><span class="si">{}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frametype</span><span class="p">,</span>
+                                                       <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                                                       <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;F&quot;</span><span class="si">{}</span><span class="s1">&quot;&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FrameBase.plot"><a class="viewcode-back" href="../../../api.html#illumination.frames.FrameBase.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This should be redefined in a class that inherits from FrameBase.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+            <span class="s2">&quot;Don&#39;t know how to `plot` </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frametype</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="FrameBase.update"><a class="viewcode-back" href="../../../api.html#illumination.frames.FrameBase.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This should be redefined in a class that inherits from FrameBase.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+            <span class="s2">&quot;Don&#39;t know how to `update` </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frametype</span><span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="nf">_find_timestep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Given a time, identify its index.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        time : float</span>
+<span class="sd">                A single time (in JD?).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        index : int</span>
+<span class="sd">                The index of the *closest* time point.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">_find_timestep</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_times</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Get the available times associated with this frame.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="c1"># does the data have a time axis defined?</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">time</span>
+        <span class="c1"># if not, return an empty time</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Time</span><span class="p">([],</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;gps&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_timesandcadence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">round</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Get all the unique times available across all the frames,</span>
+<span class="sd">        along with a suggested cadence set by the minimum</span>
+<span class="sd">        (rounded) differences between times.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        round : float</span>
+<span class="sd">                All times will be rounded to this value.</span>
+<span class="sd">                Times separated by less than this value</span>
+<span class="sd">                will be considered identical.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="c1"># store this calculation with the illustration, so it doesn&#39;t need repeating</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_precaculatedtimesandcadence</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_precaculatedtimesandcadence</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">times</span><span class="p">,</span> <span class="n">cadence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_precaculatedtimesandcadence</span><span class="p">[</span><span class="nb">round</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">gps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_times</span><span class="p">()</span><span class="o">.</span><span class="n">gps</span>
+
+            <span class="k">if</span> <span class="nb">round</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">diffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">gps</span><span class="p">))</span>
+                <span class="nb">round</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">diffs</span><span class="p">[</span><span class="n">diffs</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">])</span>
+
+            <span class="n">baseline</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">gps</span><span class="p">)</span>
+            <span class="n">rounded</span> <span class="o">=</span> <span class="nb">round</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">((</span><span class="n">gps</span> <span class="o">-</span> <span class="n">baseline</span><span class="p">)</span> <span class="o">/</span> <span class="nb">round</span><span class="p">)</span> <span class="o">+</span> <span class="n">baseline</span>
+            <span class="n">uniquegpstimes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">rounded</span><span class="p">)</span>
+            <span class="n">cadence</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">uniquegpstimes</span><span class="p">))</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">s</span>
+            <span class="n">times</span> <span class="o">=</span> <span class="n">Time</span><span class="p">(</span><span class="n">uniquegpstimes</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;gps&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_precaculatedtimesandcadence</span><span class="p">[</span><span class="nb">round</span><span class="p">]</span> <span class="o">=</span> <span class="n">times</span><span class="p">,</span> <span class="n">cadence</span>
+
+        <span class="k">return</span> <span class="n">times</span><span class="p">,</span> <span class="n">cadence</span>
+
+    <span class="k">def</span> <span class="nf">_transformimage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Some frames will want to flip or rotate an image before display.</span>
+<span class="sd">        This handles that transformation. (This should probably be set</span>
+<span class="sd">        up as an matplotlib.axes transform type of thing.)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">image</span>
+
+    <span class="k">def</span> <span class="nf">_transformxy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This handles the same transformation as that which goes into</span>
+<span class="sd">        transform image, but for x and y arrays.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+
+    <span class="k">def</span> <span class="nf">_get_orientation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Figure out the orientation of the overarching illustration.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">illustration</span><span class="o">.</span><span class="n">orientation</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;horizontal&#39;</span> <span class="c1">#&#39;vertical&#39;</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basics.html">Basic Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Zach Berta-Thompson.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

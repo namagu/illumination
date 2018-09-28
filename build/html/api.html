@@ -1,0 +1,1871 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>API &#8212; illumination 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Basic Principles" href="basics.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="api">
+<span id="id1"></span><h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
+<p>This page details the methods and classes provided by the
+<code class="docutils literal"><span class="pre">illumination</span></code> package. All sequences inherit from the
+<code class="xref py py-class docutils literal"><span class="pre">Sequence</span></code>, all frames inherit from the <code class="xref py py-class docutils literal"><span class="pre">FrameBase</span></code>,
+and all illustrations inherit from the <code class="xref py py-class docutils literal"><span class="pre">IllustrationBase</span></code>.</p>
+<div class="section" id="sequences">
+<h2>Sequences<a class="headerlink" href="#sequences" title="Permalink to this headline">¶</a></h2>
+<p>All these sequences keep track of timed datasets.</p>
+<span class="target" id="module-illumination.sequences"></span><dl class="function">
+<dt id="illumination.sequences.make_sequence">
+<code class="descclassname">illumination.sequences.</code><code class="descname">make_sequence</code><span class="sig-paren">(</span><em>initial</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/sequences.html#make_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.sequences.make_sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a Sequence for viewing with tv.</p>
+<p>This is a general wrapper that <em>tries</em> to
+guess what kind of Sequence to make,
+based solely on the inputs. If this fails,
+you may need to specify the Sequence explicitly.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>initial</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">(many possible types)</span><dd><blockquote class="first">
+<div><dl class="docutils">
+<dt>This is the input that initializes an image sequence.</dt>
+<dd><ul class="first last simple">
+<li>single FITS filename, and an extension to use.</li>
+<li>list of FITS filenames, and an extension to use.</li>
+<li>a glob pattern to search for FITS files (and extension)</li>
+<li>single FITS HDUList, and an extension to use.</li>
+<li>list of loaded FITS HDULists, and an extension to use.</li>
+<li>a Stamp object from the <cite>cosmics</cite> package.</li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="last docutils">
+<dt><a href="#id2"><span class="problematic" id="id3">*</span></a>args</dt>
+<dd><p class="first last">Positional arguments will be passed on to whatever Sequence is initialized</p>
+</dd>
+<dt><a href="#id4"><span class="problematic" id="id5">**</span></a>kwargs</dt>
+<dd><p class="first last">Keyword arguments will be passed on to whatever Sequence is initialized</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="illumination.sequences.Sequence">
+<em class="property">class </em><code class="descclassname">illumination.sequences.</code><code class="descname">Sequence</code><span class="sig-paren">(</span><em>name='generic'</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/sequences/Sequence.html#Sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.sequences.Sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>A sequence of one or more images, which can be viewed (and animated) in a tv frame.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><a class="reference internal" href="#illumination.sequences.Sequence.N" title="illumination.sequences.Sequence.N"><code class="xref py py-obj docutils literal"><span class="pre">N</span></code></a></dt>
+<dd><p class="first last">How many elements are in this sequence?</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#illumination.sequences.Sequence.cadence" title="illumination.sequences.Sequence.cadence"><code class="xref py py-obj docutils literal"><span class="pre">cadence</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">speak</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">summarize</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">warning</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="illumination.sequences.Sequence.N">
+<code class="descname">N</code><a class="headerlink" href="#illumination.sequences.Sequence.N" title="Permalink to this definition">¶</a></dt>
+<dd><p>How many elements are in this sequence?</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="illumination.sequences.Sequence.cadence">
+<code class="descname">cadence</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/sequences/Sequence.html#Sequence.cadence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.sequences.Sequence.cadence" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>cadence</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">astropy Time</span><dd><p class="first last">A typical cadence for the sequence.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="illumination.sequences.FITS_Sequence">
+<em class="property">class </em><code class="descclassname">illumination.sequences.</code><code class="descname">FITS_Sequence</code><span class="sig-paren">(</span><em>initial</em>, <em>ext_image=1</em>, <em>ext_primary=0</em>, <em>name='FITS'</em>, <em>use_headers=True</em>, <em>use_filenames=False</em>, <em>filenameparser=&lt;function flexible_filenameparser&gt;</em>, <em>timekey=None</em>, <em>timeformat=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/sequences/FITS_Sequence.html#FITS_Sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.sequences.FITS_Sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>A sequence of FITS images, with a time associated with each.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><a class="reference internal" href="#illumination.sequences.FITS_Sequence.N" title="illumination.sequences.FITS_Sequence.N"><code class="xref py py-obj docutils literal"><span class="pre">N</span></code></a></dt>
+<dd><p class="first last">How many elements are in this sequence?</p>
+</dd>
+<dt><code class="xref py py-obj docutils literal"><span class="pre">shape</span></code></dt>
+<dd><p class="first last">Returns</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">cadence</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">mean</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">median</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">speak</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">sum</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">summarize</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">warning</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Initialize a Sequence of FITS images. The goal is
+to create a list of FITS HDUs, one for each time.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>initial</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">many possible types</span><dd><blockquote class="first">
+<div><dl class="docutils">
+<dt>This is a flexible type of input, which could be...</dt>
+<dd><ul class="first last simple">
+<li>single FITS filename, and an extension to use.</li>
+<li>list of FITS filenames, and an extension to use.</li>
+<li>a glob-like search string containing &#8216;*&#8217;.</li>
+<li>single FITS HDUList, and an extension to use.</li>
+<li>list of loaded FITS HDULists, and an extension to use.</li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="last docutils">
+<dt>ext_image</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd><p class="first last">The extension that is the image.</p>
+</dd>
+<dt>ext_primary</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd><p class="first last">The extension that is the primary for the FITS.</p>
+</dd>
+<dt>name</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str</span><dd><p class="first last">The name of this sequence.</p>
+</dd>
+<dt>use_headers</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bool</span><dd><p class="first last">Should we extract (time) information from the headers?</p>
+</dd>
+<dt>use_filenames</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bool</span><dd><p class="first last">Should we extract (time) information from the filenames?</p>
+</dd>
+<dt>filenameparser</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">function</span><dd><p class="first last">This function takes a filename as input, and returns a
+dictionary containing parsed keys and values derived from it.</p>
+</dd>
+<dt>timekey</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">string</span><dd><p class="first last">Which temporal key should define the time axis?</p>
+</dd>
+<dt>timeformt</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">string</span><dd><p class="first last">What&#8217;s the time format for defining the time axis?</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><a class="reference internal" href="#illumination.sequences.FITS_Sequence.N" title="illumination.sequences.FITS_Sequence.N"><code class="xref py py-obj docutils literal"><span class="pre">N</span></code></a></dt>
+<dd><p class="first last">How many elements are in this sequence?</p>
+</dd>
+<dt><code class="xref py py-obj docutils literal"><span class="pre">shape</span></code></dt>
+<dd><p class="first last">Returns</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">cadence</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">mean</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">median</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">speak</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">sum</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">summarize</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">warning</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="illumination.sequences.FITS_Sequence.N">
+<code class="descname">N</code><a class="headerlink" href="#illumination.sequences.FITS_Sequence.N" title="Permalink to this definition">¶</a></dt>
+<dd><p>How many elements are in this sequence?</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="illumination.sequences.Stamp_Sequence">
+<em class="property">class </em><code class="descclassname">illumination.sequences.</code><code class="descname">Stamp_Sequence</code><span class="sig-paren">(</span><em>initial</em>, <em>name='Stamp'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/sequences/Stamp_Sequence.html#Stamp_Sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.sequences.Stamp_Sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a Sequence from a Stamp.
+(a Stamp is a custom, simplified version of a TPF)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>initial</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">(many possible types)</span><dd><p class="first">-a single Stamp object
+-something that can initialize a Stamp</p>
+<blockquote class="last">
+<div><p>A filename for a &#8216;.npy&#8217; file.
+A list of FITS sparse_subarray files.
+A search path of FITS sparse_subarray files (e.g. containing <a href="#id6"><span class="problematic" id="id7">*</span></a>.fits)</p>
+</div></blockquote>
+</dd>
+<dt><strong>**kwargs</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">dict</span><dd><p class="first last">Keyword arguments are passed to Stamp(initial, <a href="#id8"><span class="problematic" id="id9">**</span></a>kwargs)</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><code class="xref py py-obj docutils literal"><span class="pre">N</span></code></dt>
+<dd><p class="first last">How many elements are in this sequence?</p>
+</dd>
+<dt><code class="xref py py-obj docutils literal"><span class="pre">colorbarlabelfordisplay</span></code></dt>
+<dd><p class="first last">str(object=&#8217;&#8216;) -&gt; str</p>
+</dd>
+<dt><code class="xref py py-obj docutils literal"><span class="pre">shape</span></code></dt>
+<dd><p class="first last">Returns</p>
+</dd>
+<dt><code class="xref py py-obj docutils literal"><span class="pre">titlefordisplay</span></code></dt>
+<dd><p class="first last">str(object=&#8217;&#8216;) -&gt; str</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">cadence</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">mean</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">median</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">speak</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">sum</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">summarize</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">warning</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="illumination.sequences.TPF_Sequence">
+<em class="property">class </em><code class="descclassname">illumination.sequences.</code><code class="descname">TPF_Sequence</code><span class="sig-paren">(</span><em>initial</em>, <em>name='TPF'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/sequences/TPF_Sequence.html#TPF_Sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.sequences.TPF_Sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a Sequence from a Target Pixel File
+(see lightkurve).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>initial :</strong></dt>
+<dd><p class="first last">-a TargetPixelFile object
+-a filename of a TargetPixelFile</p>
+</dd>
+<dt><strong>**kwargs</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">dict</span><dd><p class="first last">Keyword arguments are stored in self.keywords.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><code class="xref py py-obj docutils literal"><span class="pre">N</span></code></dt>
+<dd><p class="first last">How many elements are in this sequence?</p>
+</dd>
+<dt><code class="xref py py-obj docutils literal"><span class="pre">shape</span></code></dt>
+<dd><p class="first last">Returns</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">cadence</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">mean</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">median</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">speak</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">sum</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">summarize</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">warning</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="frames">
+<h2>Frames<a class="headerlink" href="#frames" title="Permalink to this headline">¶</a></h2>
+<p>All these frames provide windows for displaying sequences.</p>
+<dl class="class">
+<dt id="illumination.frames.FrameBase">
+<em class="property">class </em><code class="descclassname">illumination.frames.</code><code class="descname">FrameBase</code><span class="sig-paren">(</span><em>name=''</em>, <em>ax=None</em>, <em>data=None</em>, <em>illustration=None</em>, <em>plotingredients=[]</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/frames/FrameBase.html#FrameBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.frames.FrameBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize this Frame, which can be one (of multiple)
+frames in an Illustration. Before plotting, each frame
+needs to have an <cite>ax</cite> defined saying where it should be
+plotted and (generally) some <cite>data</cite> associated with it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>name</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str</span><dd><p class="first last">A name to give this Frame.</p>
+</dd>
+<dt><strong>ax</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">matplotlib.axes.Axes instance</span><dd><p class="first last">All plotting will happen inside this ax.
+If set to None, the <cite>self.ax attribute</cite> will
+need to be set manually before plotting.</p>
+</dd>
+<dt><strong>data</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">flexible</span><dd><p class="first last">It can be custom object (e.g. a Stamp),
+or simple arrays, or a list of HDULists,
+or something else, depending on
+what this actual Frame does with it
+in <cite>plot</cite> and <cite>update</cite>.</p>
+</dd>
+<dt><strong>illustration</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">an Illustration</span><dd><p class="first last">The illustration in which this frame will be embedded.
+We keep track of this (sometimes) because we might want
+information that&#8217;s shared across the whole illustration
+to be accessible to this individual frame when plotting.</p>
+</dd>
+<dt><strong>plotingredients</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">list</span><dd><p class="first last">A list of keywords indicating features that will be
+plotted in this frame. It can be modified either now
+when initializing the frame, or any time before
+calling <cite>i.plot()</cite> from the illustration.</p>
+</dd>
+<dt><strong>**kwargs go nowhere (?)</strong></dt>
+<dd></dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><code class="xref py py-obj docutils literal"><span class="pre">offset</span></code></dt>
+<dd><p class="first last">Get a time offset, to use as a zero-point.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">speak</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">summarize</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">warning</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="illumination.frames.FrameBase.offset">
+<code class="descname">offset</code><a class="headerlink" href="#illumination.frames.FrameBase.offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a time offset, to use as a zero-point.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>offset</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">float</span><dd><p class="first last">An appropriate time zero-point (in JD).</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="illumination.frames.FrameBase.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/frames/FrameBase.html#FrameBase.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.frames.FrameBase.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>This should be redefined in a class that inherits from FrameBase.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="illumination.frames.FrameBase.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/frames/FrameBase.html#FrameBase.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.frames.FrameBase.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>This should be redefined in a class that inherits from FrameBase.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="illumination.frames.imshowFrame">
+<em class="property">class </em><code class="descclassname">illumination.frames.</code><code class="descname">imshowFrame</code><span class="sig-paren">(</span><em>name='image', ax=None, data=None, title=None, plotingredients=['image', 'time', 'colorbar', 'arrows', 'title'], processingsteps=[], firstframe=None, cmapkw={}, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/frames/imshowFrame.html#imshowFrame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.frames.imshowFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>An imshow frame can show a sequence of images, as an imshow.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><code class="xref py py-obj docutils literal"><span class="pre">offset</span></code></dt>
+<dd><p class="first last">Get a time offset, to use as a zero-point.</p>
+</dd>
+<dt><strong>xmax</strong></dt>
+<dd></dd>
+<dt><strong>xmin</strong></dt>
+<dd></dd>
+<dt><strong>ymax</strong></dt>
+<dd></dd>
+<dt><strong>ymin</strong></dt>
+<dd></dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">draw_arrows</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">process_image</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">speak</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">summarize</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">warning</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Initialize this imshowFrame, will can show a sequence of 2D images.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>name</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str</span><dd><p class="first last">A name to give this Frame.</p>
+</dd>
+<dt><strong>ax</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">matplotlib.axes.Axes instance</span><dd><p class="first last">All plotting will happen inside this ax.
+If set to None, the <cite>self.ax attribute</cite> will
+need to be set manually before plotting.</p>
+</dd>
+<dt><strong>data</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">Image_Sequence</span><dd><p class="first last">Any Sequence that contains 2D images.</p>
+</dd>
+<dt><strong>title</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str</span><dd><p class="first last">A string to display as the title of this frame.
+If nothing, this will try to pull a title out
+of the data, or leave it blank.</p>
+</dd>
+<dt><strong>plotingredients</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">list</span><dd><p class="first last">A list of keywords indicating features that will be
+plotted in this frame. It can be modified either now
+when initializing the frame, or any time before
+calling <cite>i.plot()</cite> from the illustration.</p>
+</dd>
+<dt><strong>cmapkw</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">dict</span><dd><p class="first last">Dictionary of keywords to feed into the cmap generation.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><code class="xref py py-obj docutils literal"><span class="pre">offset</span></code></dt>
+<dd><p class="first last">Get a time offset, to use as a zero-point.</p>
+</dd>
+<dt><strong>xmax</strong></dt>
+<dd></dd>
+<dt><strong>xmin</strong></dt>
+<dd></dd>
+<dt><strong>ymax</strong></dt>
+<dd></dd>
+<dt><strong>ymin</strong></dt>
+<dd></dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">draw_arrows</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">process_image</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">speak</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">summarize</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">warning</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="illumination.frames.imshowFrame.draw_arrows">
+<code class="descname">draw_arrows</code><span class="sig-paren">(</span><em>origin=(0</em>, <em>0)</em>, <em>ratio=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/frames/imshowFrame.html#imshowFrame.draw_arrows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.frames.imshowFrame.draw_arrows" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw arrows on this Frame, to indicate
+the +x and +y directions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>origin</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span><dd><p class="first last">The (x,y) coordinates of the corner of the arrows.</p>
+</dd>
+<dt><strong>ratio</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">float</span><dd><p class="first last">What fraction of the (longest) axis should the arrows span?</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="illumination.frames.imshowFrame.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>time=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/frames/imshowFrame.html#imshowFrame.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.frames.imshowFrame.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate the (initial) plot for this frame.</p>
+<p>Individual features can be modified afterwards,
+through the .ax (the plotted axes) or the .plotted
+(dictionary of plotted elements) attributes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>time</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">astropy Time</span><dd><p class="first last">The time to plot, defaults to the first with None.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="illumination.frames.imshowFrame.process_image">
+<code class="descname">process_image</code><span class="sig-paren">(</span><em>image</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/frames/imshowFrame.html#imshowFrame.process_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.frames.imshowFrame.process_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply any extra processing steps to the image
+(subract a median image, normalize, mask, ???)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="illumination.frames.imshowFrame.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>time</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/frames/imshowFrame.html#imshowFrame.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.frames.imshowFrame.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update this frame to a particular time (for use in animations).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="illumination.frames.EmptyTimeseriesFrame">
+<em class="property">class </em><code class="descclassname">illumination.frames.</code><code class="descname">EmptyTimeseriesFrame</code><span class="sig-paren">(</span><em>name='timeseries', xlim=[None, None], ylim=[None, None], ylabel='', histogram=True, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/frames/EmptyTimeseriesFrame.html#EmptyTimeseriesFrame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.frames.EmptyTimeseriesFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>An EmptyTimeseriesFrame has a vertical bar for time when animated.</p>
+<p>The frame should be added to an illustration,
+the illustration should be plotted,
+and then data can be plotted into the
+ETF.ax and ETF.ax_hist frames.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><code class="xref py py-obj docutils literal"><span class="pre">offset</span></code></dt>
+<dd><p class="first last">Get a time offset, to use as a zero-point.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">speak</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">summarize</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">warning</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Initialize an empty timeseries frame.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>name</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">string</span><dd><p class="first last">A custom name for this frame.</p>
+</dd>
+<dt><strong>xlim</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span><dd><p class="first last">Set the xlimits. If None, wait for data to appear.</p>
+</dd>
+<dt><strong>ylim</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span><dd><p class="first last">Set the ylimits. If None, wait for data to appear.</p>
+</dd>
+<dt><strong>ylabel</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">string</span><dd><p class="first last">Set a ylabel for this plot.</p>
+</dd>
+<dt><strong>histogram</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bool</span><dd><p class="first last">Should we add an extra axis for a histogram?</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><code class="xref py py-obj docutils literal"><span class="pre">offset</span></code></dt>
+<dd><p class="first last">Get a time offset, to use as a zero-point.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">speak</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">summarize</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">warning</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="illumination.frames.ZoomFrame">
+<em class="property">class </em><code class="descclassname">illumination.frames.</code><code class="descname">ZoomFrame</code><span class="sig-paren">(</span><em>source=None, position=(0, 0), size=(10, 10), name='zoom', cmapkw={}, plotingredients=['image', 'colorbar'], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/frames/ZoomFrame.html#ZoomFrame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.frames.ZoomFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a ZoomFrame that can display
+images taken from a zoomed subset of
+a <cite>source</cite> imshowFrame. This is kind
+of like a magnifying class you can
+drop down on an image.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>source</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">imshowFrame</span><dd><p class="first last">A frame into which this one will be zooming.</p>
+</dd>
+<dt><strong>position</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">(tuple)</span><dd><p class="first last">The (x, y) = (col, row) position of the center of zoom.</p>
+</dd>
+<dt><strong>shape</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">(tuple)</span><dd><p class="first last">The (x, y) = (ncols, nrows) shape of the zoom.</p>
+</dd>
+<dt><strong>name</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str</span><dd><p class="first last">A name to give this Frame.</p>
+</dd>
+<dt><strong>ax</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">matplotlib.axes.Axes instance</span><dd><p class="first last">All plotting will happen inside this ax.
+If set to None, the <cite>self.ax attribute</cite> will
+need to be set manually before plotting.</p>
+</dd>
+<dt><strong>plotingredients</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">list</span><dd><p class="first last">A list of keywords indicating features that will be
+plotted in this frame. It can be modified either now
+when initializing the frame, or any time before
+calling <cite>i.plot()</cite> from the illustration.</p>
+</dd>
+<dt><strong>cmapkw</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">dict</span><dd><p class="first last">Dictionary of keywords to feed into the cmap generation.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><code class="xref py py-obj docutils literal"><span class="pre">offset</span></code></dt>
+<dd><p class="first last">Get a time offset, to use as a zero-point.</p>
+</dd>
+<dt><strong>xmax</strong></dt>
+<dd></dd>
+<dt><strong>xmin</strong></dt>
+<dd></dd>
+<dt><strong>ymax</strong></dt>
+<dd></dd>
+<dt><strong>ymin</strong></dt>
+<dd></dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">draw_arrows</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">process_image</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">speak</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">summarize</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">warning</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="illumination.frames.LocalZoomFrame">
+<em class="property">class </em><code class="descclassname">illumination.frames.</code><code class="descname">LocalZoomFrame</code><span class="sig-paren">(</span><em>source</em>, <em>position=(0</em>, <em>0)</em>, <em>size=(10</em>, <em>10)</em>, <em>zoom=10</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/frames/LocalZoomFrame.html#LocalZoomFrame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.frames.LocalZoomFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a ZoomFrame that can display
+images taken from a zoomed subset of
+a <cite>source</cite> imshowFrame. This is kind
+of like a magnifying class you can
+drop down on an image.</p>
+<p>It <em>doesn&#8217;t</em> add a new axis.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>source</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">imshowFrame</span><dd><p class="first last">A frame into which this one will be zooming.</p>
+</dd>
+<dt><strong>position</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">(tuple)</span><dd><p class="first last">The (x, y) = (col, row) position of the center of zoom.
+(These are in original image coordinates,
+not those that have been transformed for display.)</p>
+</dd>
+<dt><strong>shape</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">(tuple)</span><dd><p class="first last">The (x, y) = (ncols, nrows) shape of the zoom.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><code class="xref py py-obj docutils literal"><span class="pre">offset</span></code></dt>
+<dd><p class="first last">Get a time offset, to use as a zero-point.</p>
+</dd>
+<dt><strong>xmax</strong></dt>
+<dd></dd>
+<dt><strong>xmin</strong></dt>
+<dd></dd>
+<dt><strong>ymax</strong></dt>
+<dd></dd>
+<dt><strong>ymin</strong></dt>
+<dd></dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">draw_arrows</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">process_image</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">speak</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">summarize</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">warning</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="illumination.frames.CameraFrame">
+<em class="property">class </em><code class="descclassname">illumination.frames.</code><code class="descname">CameraFrame</code><span class="sig-paren">(</span><em>name='camera'</em>, <em>ax=None</em>, <em>data=None</em>, <em>**framekw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/frames/CameraFrame.html#CameraFrame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.frames.CameraFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a CameraFrame. For plotting, this
+expects to see a full-frame image from a full
+camera (not split into CCDs.)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>name</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str</span><dd><p class="first last">A name to give this Frame.</p>
+</dd>
+<dt><strong>ax</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">matplotlib.axes.Axes instance</span><dd><p class="first last">All plotting will happen inside this ax.
+If set to None, the <cite>self.ax attribute</cite> will
+need to be set manually before plotting.</p>
+</dd>
+<dt><strong>data</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">Image_Sequence</span><dd><p class="first last">Any Sequence that contains 2D images.</p>
+</dd>
+<dt><strong>**framekw</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">dict</span><dd><p class="first last">Passed to imshowFrame;
+check it out for more options.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><code class="xref py py-obj docutils literal"><span class="pre">offset</span></code></dt>
+<dd><p class="first last">Get a time offset, to use as a zero-point.</p>
+</dd>
+<dt><strong>xmax</strong></dt>
+<dd></dd>
+<dt><strong>xmin</strong></dt>
+<dd></dd>
+<dt><strong>ymax</strong></dt>
+<dd></dd>
+<dt><strong>ymin</strong></dt>
+<dd></dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">draw_arrows</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">process_image</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">speak</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">summarize</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">warning</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="illumination.frames.CCDFrame">
+<em class="property">class </em><code class="descclassname">illumination.frames.</code><code class="descname">CCDFrame</code><span class="sig-paren">(</span><em>name='ccd'</em>, <em>ax=None</em>, <em>data=None</em>, <em>camera=&lt;camera Frame | data=&lt;sequence of 0 images&gt; | name=camera&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/frames/CCDFrame.html#CCDFrame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.frames.CCDFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is an imshowFrame associated with one CCD. It can
+transform from CCD coordinates to Camera coordinates.</p>
+<p>A single CCD can be created on its own, but more often
+it will be linked to a Camera, to continue the transformation
+onward from Camera to display.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><code class="xref py py-obj docutils literal"><span class="pre">offset</span></code></dt>
+<dd><p class="first last">Get a time offset, to use as a zero-point.</p>
+</dd>
+<dt><strong>xmax</strong></dt>
+<dd></dd>
+<dt><strong>xmin</strong></dt>
+<dd></dd>
+<dt><strong>ymax</strong></dt>
+<dd></dd>
+<dt><strong>ymin</strong></dt>
+<dd></dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">draw_arrows</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">process_image</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">speak</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">summarize</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">warning</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="illustrations">
+<h2>Illustrations<a class="headerlink" href="#illustrations" title="Permalink to this headline">¶</a></h2>
+<p>All these illustrations provide layouts in which to place frames.</p>
+<dl class="class">
+<dt id="illumination.illustrations.IllustrationBase">
+<em class="property">class </em><code class="descclassname">illumination.illustrations.</code><code class="descname">IllustrationBase</code><span class="sig-paren">(</span><em>nrows=1</em>, <em>ncols=1</em>, <em>figkw={'figsize': None</em>, <em>'dpi': None}</em>, <em>sharecolorbar=True</em>, <em>subplot_spec=None</em>, <em>cmapkw={}</em>, <em>**gridspeckw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/illustrations/IllustrationBase.html#IllustrationBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.illustrations.IllustrationBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>This contains the basic layout and organization
+for a linked visualization of images.</p>
+<p>Other illustrations inherit from this basic one,
+changing the</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">animate</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">savefig</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">speak</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">summarize</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">warning</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Initialize an Illustration,
+setting up its figure and basic layout.</p>
+<dl class="docutils">
+<dt>nrows</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>The number of rows in the illustration.</dd>
+<dt>ncols</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>The number of columns in the illustration.</dd>
+<dt>figkw</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">dict</span><dd>Keywords to pass along to create a figure.</dd>
+<dt><a href="#id10"><span class="problematic" id="id11">**</span></a>gridspeckw</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">dict</span><dd>Any extra keywords are passed to the
+gridspec</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">animate</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">savefig</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">speak</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">summarize</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">warning</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="illumination.illustrations.IllustrationBase.animate">
+<code class="descname">animate</code><span class="sig-paren">(</span><em>filename='test.mp4'</em>, <em>mintime=None</em>, <em>maxtimespan=None</em>, <em>cadence=&lt;Quantity 1. s&gt;</em>, <em>fps=30</em>, <em>dpi=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/illustrations/IllustrationBase.html#IllustrationBase.animate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.illustrations.IllustrationBase.animate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an animation from an Illustration,
+using the time axes associated with each frame.</p>
+<p>This should be called after illustration.plot()</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>filename</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str</span><dd></dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="illumination.illustrations.IllustrationBase.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/illustrations/IllustrationBase.html#IllustrationBase.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.illustrations.IllustrationBase.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot all the frames in this illustration.</p>
+<p><a href="#id12"><span class="problematic" id="id13">*</span></a>args, <a href="#id14"><span class="problematic" id="id15">**</span></a>kwargs are passed to frames&#8217; .plot()</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="illumination.illustrations.IllustrationBase.savefig">
+<code class="descname">savefig</code><span class="sig-paren">(</span><em>filename</em>, <em>**savefigkw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/illustrations/IllustrationBase.html#IllustrationBase.savefig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.illustrations.IllustrationBase.savefig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call plt.savefig, but make an announcement about it.
+This should be called after illustration.plot()</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>filename</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str</span><dd><p class="first last">Where should the figure be saved?</p>
+</dd>
+<dt><strong>**savefigkw are passed to savefig</strong></dt>
+<dd></dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="illumination.illustrations.IllustrationBase.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/illustrations/IllustrationBase.html#IllustrationBase.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.illustrations.IllustrationBase.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update all the frames in this illustration.</p>
+<p><a href="#id16"><span class="problematic" id="id17">*</span></a>args, <a href="#id18"><span class="problematic" id="id19">**</span></a>kwargs are passed to the frames&#8217; .update()</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="illumination.illustrations.GenericIllustration">
+<em class="property">class </em><code class="descclassname">illumination.illustrations.</code><code class="descname">GenericIllustration</code><span class="sig-paren">(</span><em>imshows=[]</em>, <em>timeseries=[]</em>, <em>imshowheight=1.0</em>, <em>imshowrows=1</em>, <em>sizescale=3</em>, <em>figsize=None</em>, <em>dpi=None</em>, <em>hspace=0.03</em>, <em>wspace=0.08</em>, <em>left=0.1</em>, <em>right=0.9</em>, <em>bottom=0.2</em>, <em>top=0.8</em>, <em>**illkw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/illustrations/GenericIllustration.html#GenericIllustration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.illustrations.GenericIllustration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize an illustration from list of frames.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>imshows</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">list</span><dd><p class="first last">A list of imshow frames, to be displayed in a row on the top.</p>
+</dd>
+<dt><strong>timeseries</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">list</span><dd><p class="first last">A list of timeseries frames, to be displayed in rows below.</p>
+</dd>
+<dt><strong>imshowheight</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">float</span><dd><p class="first last">How tall is the imshow, compared to the entire timeseries block?</p>
+</dd>
+<dt><strong>sizescale</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">float</span><dd><p class="first last">An overall size scale, in inches.</p>
+</dd>
+<dt><strong>figsize</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span><dd><p class="first last">Override the automated figure size with your own, in inches.</p>
+</dd>
+<dt><strong>**illkw keywords are passed to IllustrationBase</strong></dt>
+<dd></dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">animate</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">savefig</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">speak</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">summarize</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">warning</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="illumination.illustrations.CameraIllustration">
+<em class="property">class </em><code class="descclassname">illumination.illustrations.</code><code class="descname">CameraIllustration</code><span class="sig-paren">(</span><em>data=[]</em>, <em>orientation='horizontal'</em>, <em>sizeofcamera=4</em>, <em>subplot_spec=None</em>, <em>**framekw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/illustrations/CameraIllustration.html#CameraIllustration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.illustrations.CameraIllustration" title="Permalink to this definition">¶</a></dt>
+<dd><p>An illustration for displaying a single Camera (unrotated, untransformed).</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">animate</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">savefig</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">speak</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">summarize</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">warning</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>data</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">various</span><dd><p class="first">Anything that can initialize a sequence with
+the make_sequence() helper function.</p>
+<p>or</p>
+<p class="last">a dictionary with keys of &#8216;ccd1&#8217;, &#8216;ccd2&#8217;, &#8216;ccd3&#8217;, &#8216;ccd4&#8217;
+that each contain something that can initialize a sequence</p>
+</dd>
+<dt><strong>orientation</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str</span><dd><p class="first last">&#8216;horizontal&#8217; = camera 2 is right of camera 1
+&#8216;vertical&#8217;  = camera 2 is below camera 1</p>
+</dd>
+<dt><strong>sizeofcamera</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">float</span><dd><p class="first last">What&#8217;s the size, in inches, to display a single camera?</p>
+</dd>
+<dt><strong>**framekw passed to CameraFrame</strong></dt>
+<dd></dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">animate</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">savefig</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">speak</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">summarize</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">warning</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="illumination.illustrations.FourCameraIllustration">
+<em class="property">class </em><code class="descclassname">illumination.illustrations.</code><code class="descname">FourCameraIllustration</code><span class="sig-paren">(</span><em>cam1=[]</em>, <em>cam2=[]</em>, <em>cam3=[]</em>, <em>cam4=[]</em>, <em>orientation='horizontal'</em>, <em>sizeofcamera=4</em>, <em>subplot_spec=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/illustrations/FourCameraIllustration.html#FourCameraIllustration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.illustrations.FourCameraIllustration" title="Permalink to this definition">¶</a></dt>
+<dd><p>For displaying a single Camera.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">animate</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">savefig</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">speak</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">summarize</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">warning</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>cam1, etc...</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">various</span><dd><p class="first last">Anything that can initialize a sequence with
+the make_sequence() helper function.</p>
+</dd>
+<dt><strong>orientation</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str</span><dd><p class="first last">&#8216;horizontal&#8217; = camera 2 is right of camera 1
+&#8216;vertical&#8217;  = camera 2 is below camera 1 (not yet implemented)</p>
+</dd>
+<dt><strong>sizeofcamera</strong></dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">float</span><dd><p class="first last">What&#8217;s the size, in inches, to display a single camera?</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">animate</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">savefig</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">speak</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">summarize</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">warning</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="illumination.illustrations.SingleCameraWithZoomIllustration">
+<em class="property">class </em><code class="descclassname">illumination.illustrations.</code><code class="descname">SingleCameraWithZoomIllustration</code><span class="sig-paren">(</span><em>data=[]</em>, <em>zoomposition=(0</em>, <em>0)</em>, <em>zoomsize=(10</em>, <em>10)</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/illustrations/SingleCameraWithZoomIllustration.html#SingleCameraWithZoomIllustration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.illustrations.SingleCameraWithZoomIllustration" title="Permalink to this definition">¶</a></dt>
+<dd><p>For displaying a single Camera.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">animate</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">savefig</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">speak</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">summarize</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">warning</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><a href="#id20"><span class="problematic" id="id21">**</span></a>kwargs are passed to both make_sequence and the frames</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">animate</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">savefig</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">speak</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">summarize</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">warning</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="illumination.illustrations.SideBySideIllustration">
+<em class="property">class </em><code class="descclassname">illumination.illustrations.</code><code class="descname">SideBySideIllustration</code><span class="sig-paren">(</span><em>imshows=[], timeseries=[], width_ratios=[5, 1], each=1.0, hspace=0.15, wspace=0.08, left=0.15, right=0.95, bottom=0.3, top=0.9, fudge=1.2, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/illustrations/SideBySideIllustration.html#SideBySideIllustration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.illustrations.SideBySideIllustration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize an illustration from list of frames.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">animate</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">savefig</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">speak</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">summarize</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">warning</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table Of Contents</a></h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basics.html">Basic Principles</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#sequences">Sequences</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#frames">Frames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#illustrations">Illustrations</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="basics.html" title="previous chapter">Basic Principles</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/api.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Zach Berta-Thompson.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/api.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

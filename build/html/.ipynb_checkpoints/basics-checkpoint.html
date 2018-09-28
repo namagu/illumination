@@ -1,0 +1,590 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Basic Principles &#8212; illumination 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 8ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+</style>
+<div class="section" id="Basic-Principles">
+<h1>Basic Principles<a class="headerlink" href="#Basic-Principles" title="Permalink to this headline">¶</a></h1>
+<p>Let&#8217;s imagine you want to do something slightly more complicated. Maybe
+you want to make a movie, and include an linked time series plot next to
+it. Maybe you want to include several movie frames at different
+cadences. Maybe you want to create your own snazzy custom format. To do
+so, there are three core concepts you need to understand.</p>
+<div class="section" id="a-Sequence-is-a-collection-of-data,-with-times">
+<h2>a <code class="docutils literal"><span class="pre">Sequence</span></code> is a collection of data, with times<a class="headerlink" href="#a-Sequence-is-a-collection-of-data,-with-times" title="Permalink to this headline">¶</a></h2>
+<p>To make an animation, we need a data structure that has some kind of
+<em>data</em> that has a <em>time</em> axis associated with it. For example, here we
+make a <code class="docutils literal"><span class="pre">Sequence</span></code> out of a small postage stamp of imaging data.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">illumination</span> <span class="k">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">illumination.cartoons</span> <span class="k">import</span> <span class="n">create_test_stamp</span>
+<span class="n">stamp</span> <span class="o">=</span> <span class="n">create_test_stamp</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">make_sequence</span></code> function is a general wrapper that does a decent
+job of figuring out what kind of sequence should be made out of the
+given inputs.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">seq</span> <span class="o">=</span> <span class="n">make_sequence</span><span class="p">(</span><span class="n">stamp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p><code class="docutils literal"><span class="pre">make_sequence</span></code> should be able to handle at least the following types
+of input: + single FITS filename, and an <code class="docutils literal"><span class="pre">ext_image=</span></code> keyword for the
+extension to use + list of FITS filenames, and an <code class="docutils literal"><span class="pre">ext_image=</span></code> keyword
++ a glob pattern to search for FITS files, and an <code class="docutils literal"><span class="pre">ext_image=</span></code> keyword
++ single FITS HDUList, and an <code class="docutils literal"><span class="pre">ext_image=</span></code> keyword + list of loaded
+FITS HDULists, and an <code class="docutils literal"><span class="pre">ext_image=</span></code> keyword + a Stamp object from the
+<code class="docutils literal"><span class="pre">cosmics</span></code> package</p>
+<p>Each <code class="docutils literal"><span class="pre">sequence</span></code> has a <code class="docutils literal"><span class="pre">.time</span></code> attribute. It is an <code class="docutils literal"><span class="pre">astropy.time</span></code>
+object, and can be indexed as an array. If times are fake (for example,
+if they are simply image number or cadence number), then we pretend
+(artificially) that the times are <code class="docutils literal"><span class="pre">gps</span></code> format with a cadence of 1s.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="si">{}</span><span class="s2"></span>
+<span class="s2"> has </span><span class="si">{}</span><span class="s2"> times defined,</span>
+<span class="s2"> spanning </span><span class="si">{}</span><span class="s2"></span>
+<span class="s2">       to </span><span class="si">{}</span><span class="s2"></span>
+<span class="s2"> with a cadence of </span><span class="si">{:.2}</span><span class="s2">&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+    <span class="n">seq</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="o">.</span><span class="n">time</span><span class="p">),</span> <span class="n">seq</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">seq</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">seq</span><span class="o">.</span><span class="n">cadence</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<p>Each sequence can be indexed directly with <code class="docutils literal"><span class="pre">[i]</span></code> to extract the
+<code class="docutils literal"><span class="pre">i</span></code>th element of the dataset. Different types of sequences will
+store data in different ways. For a small stamp, it will generally load
+the entire 3D (x,y,t) dataset into memory. For a sequence of large FITS
+images, it will generally only load individual FITS images on the fly as
+needed, to preserve memory. These different background behaviors should
+hopefully remain hidden to the casual user.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">fi</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">seq</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">seq</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="a-Frame-is-a-plot-panel,-which-can-display-a-Sequence">
+<h2>a <code class="docutils literal"><span class="pre">Frame</span></code> is a plot panel, which can display a <code class="docutils literal"><span class="pre">Sequence</span></code><a class="headerlink" href="#a-Frame-is-a-plot-panel,-which-can-display-a-Sequence" title="Permalink to this headline">¶</a></h2>
+<p>A frame is a container in which a sequence can be displayed. Different
+frames can display different views, even of the same dataset. For
+example, here we create two different frames that include our little
+sequence <code class="docutils literal"><span class="pre">seq</span></code> as their data.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">normal</span> <span class="o">=</span> <span class="n">imshowFrame</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;cecelia&#39;</span><span class="p">,</span>
+                     <span class="n">data</span><span class="o">=</span><span class="n">seq</span><span class="p">)</span>
+<span class="n">normal</span>
+</pre></div>
+</div>
+</div>
+<p>Below, we can create a different frame using the same data, but by
+including the <code class="docutils literal"><span class="pre">processingsteps</span></code> keyword, it will subtract the mean
+image from each individual image before displaying it.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">subtracted</span> <span class="o">=</span> <span class="n">imshowFrame</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;henrietta&#39;</span><span class="p">,</span>
+                         <span class="n">data</span><span class="o">=</span><span class="n">seq</span><span class="p">,</span>
+                         <span class="n">title</span><span class="o">=</span><span class="s1">&#39;(median subtracted)&#39;</span><span class="p">,</span>
+                         <span class="n">processingsteps</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;subtractmean&#39;</span><span class="p">])</span>
+<span class="n">subtracted</span>
+</pre></div>
+</div>
+</div>
+<p>We will be able to visualize these frames once they are included in an
+illustration.</p>
+</div>
+<div class="section" id="an-Illustration-is-a-collection-of-Frames,-with-its-own-layout">
+<h2>an <code class="docutils literal"><span class="pre">Illustration</span></code> is a collection of <code class="docutils literal"><span class="pre">Frames</span></code>, with its own layout<a class="headerlink" href="#an-Illustration-is-a-collection-of-Frames,-with-its-own-layout" title="Permalink to this headline">¶</a></h2>
+<p>Once we have created our frames, we can include them in an illustration.
+The illustration handles not only the basic grid layout of the frames,
+but also synchronizing their frames when plotting an animation. When you
+call the illustration&#8217;s <code class="docutils literal"><span class="pre">.plot</span></code> method, it will make all the
+constituent frames <code class="docutils literal"><span class="pre">plot</span></code> too. When you call the <code class="docutils literal"><span class="pre">.animate</span></code> method,
+it will make an animation by looping through a grid of times and
+updating each frame whenever it needs updating.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">i</span> <span class="o">=</span> <span class="n">GenericIllustration</span><span class="p">(</span><span class="n">imshows</span><span class="o">=</span><span class="p">[</span><span class="n">normal</span><span class="p">,</span> <span class="n">subtracted</span><span class="p">])</span>
+<span class="n">i</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">i</span><span class="o">.</span><span class="n">animate</span><span class="p">(</span><span class="s1">&#39;_static/a-pair-of-frames.mp4&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<video src="_static/a-pair-of-frames.mp4" controls loop></video><p>Looking back at the <code class="docutils literal"><span class="pre">normal</span></code> and <code class="docutils literal"><span class="pre">subtracted</span></code> frames that we
+defined, we can see a few features. The data and times for the two
+frames are identical, so the images update synchronously at each
+timestep of the animation. The <code class="docutils literal"><span class="pre">subtracted</span></code> frame looks like noise
+scattered around 0, as we would expect for having subtracted off the
+mean image. We gave <code class="docutils literal"><span class="pre">subtracted</span></code> a custom title, but <code class="docutils literal"><span class="pre">normal</span></code> fell
+back on an initial best guess.</p>
+<p>If you want, you can access the individual frames inside an illustration
+through the <code class="docutils literal"><span class="pre">.frames</span></code> dictionary. This may come in handy if you want
+to modify the attributes of a frame once it&#8217;s in an illustration, or
+change something in how it is plotted after calling <code class="docutils literal"><span class="pre">i.plot()</span></code>. (See
+examples below.)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> contains </span><span class="si">{}</span><span class="s1"> frames: </span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">frames</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">frames</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span>
+</pre></div>
+</div>
+</div>
+<p>By default, all image frames will share the same color mapping. We can
+let each frame have its own color mapping by setting the illustration&#8217;s
+<code class="docutils literal"><span class="pre">sharecolorbar=</span></code> keyword to <code class="docutils literal"><span class="pre">False</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">i</span> <span class="o">=</span> <span class="n">GenericIllustration</span><span class="p">(</span><span class="n">imshows</span><span class="o">=</span><span class="p">[</span><span class="n">normal</span><span class="p">,</span> <span class="n">subtracted</span><span class="p">],</span> <span class="n">sharecolorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">i</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">i</span><span class="o">.</span><span class="n">animate</span><span class="p">(</span><span class="s1">&#39;_static/a-pair-of-frames-with-different-colorbars.mp4&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<video src="_static/a-pair-of-frames-with-different-colorbars.mp4" controls loop></video><p>If you&#8217;re trying to directly compare values across different frames,
+keep <code class="docutils literal"><span class="pre">sharecolorbar=True</span></code>. If you&#8217;re looking for qualitative features
+and want to highlight the details unique to each frame, let each have
+its own colorbar. In this example, where the data were simulated to
+represent photon counts, we can see that the noise in the difference
+images is highest where the flux in the normal image is too.</p>
+</div>
+<div class="section" id="some-example-Frame-combinations">
+<h2>some example <code class="docutils literal"><span class="pre">Frame</span></code> combinations<a class="headerlink" href="#some-example-Frame-combinations" title="Permalink to this headline">¶</a></h2>
+<p>We can treat frames as somewhat modular containers, and build up
+illustrations through combinations of them. Here are a couple of
+examples of making custom illustrations by following the general process
+of 1. make some sequences 2. put them in frames 3. fill an illustration</p>
+<div class="section" id="simple-ZoomFrame-(recreating-illustratefits)">
+<h3>simple <code class="docutils literal"><span class="pre">ZoomFrame</span></code> (recreating <code class="docutils literal"><span class="pre">illustratefits</span></code>)<a class="headerlink" href="#simple-ZoomFrame-(recreating-illustratefits)" title="Permalink to this headline">¶</a></h3>
+<p>Let&#8217;s start by recreating the zoom feature shown with <code class="docutils literal"><span class="pre">illustratefits</span></code>
+in the quickstart.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># first create a sequence</span>
+<span class="n">big</span> <span class="o">=</span> <span class="n">make_sequence</span><span class="p">(</span><span class="n">create_test_stamp</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">xsize</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">ysize</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
+
+<span class="c1"># then define some frames</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">imshowFrame</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;big-image&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">big</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;imshow&#39;</span><span class="p">)</span>
+<span class="n">zoom</span> <span class="o">=</span> <span class="n">ZoomFrame</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;zoom&#39;</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">image</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;zoom&#39;</span><span class="p">)</span>
+
+<span class="c1"># then populate an illustration with them</span>
+<span class="n">i</span> <span class="o">=</span> <span class="n">GenericIllustration</span><span class="p">(</span><span class="n">imshows</span><span class="o">=</span><span class="p">[</span><span class="n">image</span><span class="p">,</span> <span class="n">zoom</span><span class="p">])</span>
+<span class="n">i</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="c1">#i.animate(&#39;_static/an-example-of-a-zoom.mp4&#39;, dpi=75)</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="s1">&#39;big-image&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<video src="_static/an-example-of-a-zoom.mp4" controls loop><p>An example of a zoom movie.</p>
+</video></div>
+<div class="section" id="multiple-ZoomFrames-on-multiple-images">
+<h3>multiple <code class="docutils literal"><span class="pre">ZoomFrames</span></code> on multiple images<a class="headerlink" href="#multiple-ZoomFrames-on-multiple-images" title="Permalink to this headline">¶</a></h3>
+<p>Now, let&#8217;s build a bit on that by including both the original images and
+some median-subtracted ones. In addition to the extra frames, we&#8217;re also
+including some more complicated options in generating the illustration
+layout.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># first create a sequence</span>
+<span class="n">big</span> <span class="o">=</span> <span class="n">make_sequence</span><span class="p">(</span><span class="n">create_test_stamp</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">xsize</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">ysize</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
+
+<span class="c1"># then define some frames</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">imshowFrame</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;big-image&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">big</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;imshow&#39;</span><span class="p">)</span>
+<span class="n">zoom</span> <span class="o">=</span> <span class="n">ZoomFrame</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;zoom&#39;</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">image</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;zoom&#39;</span><span class="p">)</span>
+<span class="n">subtracted</span> <span class="o">=</span> <span class="n">imshowFrame</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;big-subtracted&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">big</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;subtracted&#39;</span><span class="p">,</span> <span class="n">processingsteps</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;subtractmedian&#39;</span><span class="p">])</span>
+<span class="n">subtractedzoom</span> <span class="o">=</span> <span class="n">ZoomFrame</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;zoom-subtracted&#39;</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">subtracted</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;zoom&#39;</span><span class="p">)</span>
+
+<span class="c1"># then populate an illustration with them</span>
+<span class="n">i</span> <span class="o">=</span> <span class="n">GenericIllustration</span><span class="p">(</span><span class="n">imshows</span><span class="o">=</span><span class="p">[</span><span class="n">image</span><span class="p">,</span> <span class="n">zoom</span><span class="p">,</span> <span class="n">subtracted</span><span class="p">,</span> <span class="n">subtractedzoom</span><span class="p">],</span> <span class="n">imshowrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                        <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">wspace</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span>
+                        <span class="n">left</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">i</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">i</span><span class="o">.</span><span class="n">animate</span><span class="p">(</span><span class="s1">&#39;_static/an-example-of-a-more-complicated-zoom.mp4&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">75</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<video src="_static/an-example-of-a-more-complicated-zoom.mp4" controls loop><p>An example of a more complicated zoom movie.</p>
+</video></div>
+<div class="section" id="an-EmptyTimeseriesFrame-linked-to-an-imshowFrame">
+<h3>an <code class="docutils literal"><span class="pre">EmptyTimeseriesFrame</span></code> linked to an <code class="docutils literal"><span class="pre">imshowFrame</span></code><a class="headerlink" href="#an-EmptyTimeseriesFrame-linked-to-an-imshowFrame" title="Permalink to this headline">¶</a></h3>
+<p>It might be nice to see a light curve synced up to the data from which
+it is derived. The <code class="docutils literal"><span class="pre">EmptyTimeseriesFrame</span></code> provides us with an empty
+frame, into which we can plot some time-series data. Here&#8217;s a first step
+toward that capability; it still needs a bit of work, but hopefully this
+is enough to get started. The basic idea is to create an available plot
+location (an <code class="docutils literal"><span class="pre">Axes</span></code> object, in <code class="docutils literal"><span class="pre">matplotlib</span></code>-speak), where you can
+fill later with whatever plot elements you like. The below example
+demonstrates how to populate the time-series frame in two ways, both
+using its built-in <code class="docutils literal"><span class="pre">.plot</span></code> function and simply by adding elements to
+<code class="docutils literal"><span class="pre">i.frames['timeseries'].ax</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># make a dataset</span>
+<span class="n">star</span> <span class="o">=</span> <span class="n">make_sequence</span><span class="p">(</span><span class="n">create_test_stamp</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">xsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">ysize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">single</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+<span class="c1"># create an empty time-series frame into which we will plot a timeseries</span>
+<span class="n">lightcurve</span> <span class="o">=</span> <span class="n">EmptyTimeseriesFrame</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;timeseries&#39;</span><span class="p">)</span>
+<span class="n">someimage</span> <span class="o">=</span> <span class="n">imshowFrame</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;image&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">star</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">plotingredients</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">,</span> <span class="s1">&#39;arrows&#39;</span><span class="p">,</span> <span class="s1">&#39;colorbar&#39;</span><span class="p">])</span>
+
+<span class="c1"># create an illustration that positions these frames next to each other</span>
+<span class="n">i</span> <span class="o">=</span> <span class="n">SideBySideIllustration</span><span class="p">(</span><span class="n">timeseries</span><span class="o">=</span><span class="p">[</span><span class="n">lightcurve</span><span class="p">],</span> <span class="n">imshows</span><span class="o">=</span><span class="p">[</span><span class="n">someimage</span><span class="p">])</span>
+
+<span class="c1"># plotting the illustration creates the basic structure...</span>
+<span class="n">i</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+
+<span class="c1"># ...but we can still modify it through the individual frames</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="s1">&#39;timeseries&#39;</span><span class="p">]</span>
+
+<span class="c1"># the time-series f.plot plot will subtract a the illustration&#39;s shared time offset</span>
+<span class="n">time</span> <span class="o">=</span> <span class="n">star</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">jd</span>
+<span class="n">flux</span> <span class="o">=</span> <span class="n">star</span><span class="o">.</span><span class="n">_gather_3d</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">flux</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+
+<span class="c1"># the f.ax refers to the time-series axes, so this is how we set up to plot into it</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">flux</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;cornflowerblue&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Some Flux&#39;</span><span class="p">)</span>
+
+<span class="n">i</span><span class="o">.</span><span class="n">animate</span><span class="p">(</span><span class="s1">&#39;_static/an-example-of-a-timeseries.mp4&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<video src="_static/an-example-of-a-timeseries.mp4" controls loop><p>An example movie with a time-series linked to the movie.</p>
+</video><p>The interface for plotting timeseries is still a little buggy and may
+change soon. For now, hopefully you find this helpful!</p>
+<p>Some more examples are included, in one way or another, in the
+<code class="docutils literal"><span class="pre">tests/</span></code> directory of the <code class="docutils literal"><span class="pre">playground</span></code> repository. Check those out,
+or please feel free to contribute new examples here! As always, please
+do not hesitate to contact <a class="reference external" href="mailto:zach&#46;bertathompson&#37;&#52;&#48;colorado&#46;edu">Zach
+Berta-Thompson</a> or leave an issue on
+the <a class="reference external" href="http://tessgit.mit.edu/zkbt/playground">gitlab repository</a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basics.html">Basic Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/.ipynb_checkpoints/basics-checkpoint.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Zach Berta-Thompson.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/.ipynb_checkpoints/basics-checkpoint.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

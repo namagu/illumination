@@ -1,0 +1,432 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Quickstart &#8212; illumination 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 8ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+</style>
+<div class="section" id="Quickstart">
+<h1>Quickstart<a class="headerlink" href="#Quickstart" title="Permalink to this headline">¶</a></h1>
+<p>Let&#8217;s imagine you&#8217;re impatient, and all you want to do is make a pretty
+movie or two. Here&#8217;s a good place to start. Odds are, you have a
+collection of <code class="docutils literal"><span class="pre">.fits</span></code> files somewhere, and you&#8217;d like to display them
+as a movie. To simulate your situation, let&#8217;s make a directory full of
+files.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">illumination.cartoons</span> <span class="k">import</span> <span class="n">create_directory_of_fits</span>
+<span class="n">create_directory_of_fits</span><span class="p">(</span><span class="s1">&#39;some-directory&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>If we look in the <code class="docutils literal"><span class="pre">some-directory</span></code> directory, we see it contains four
+directories, each of which contain some images.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="o">!</span>ls some-directory/*
+</pre></div>
+</div>
+</div>
+<div class="section" id="Basic-Animations">
+<h2>Basic Animations<a class="headerlink" href="#Basic-Animations" title="Permalink to this headline">¶</a></h2>
+<p>Now, starting with these FITS, we can use the following commands to
+visualize those images.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">illumination</span> <span class="k">import</span> <span class="n">illustratefits</span><span class="p">,</span> <span class="n">glob</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">i</span> <span class="o">=</span> <span class="n">illustratefits</span><span class="p">(</span><span class="s1">&#39;some-directory/cam1/*.fits&#39;</span><span class="p">)</span>
+<span class="n">i</span><span class="o">.</span><span class="n">animate</span><span class="p">(</span><span class="s1">&#39;_static/a-snazzy-little-movie.mp4&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<video src="_static/a-snazzy-little-movie.mp4" controls loop></video><p>Neat! That makes us a little animation!</p>
+<p>The <code class="docutils literal"><span class="pre">illustratefits</span></code> function will make an animation out of all the
+files that matches the file pattern (with <code class="docutils literal"><span class="pre">glob</span></code>). It will try to find
+times inside the headers of those images, but if it doesn&#8217;t, it will
+simply order images by filename.</p>
+<p>If you want, you can explicitly create a list of files to include. For
+example, you could feed in the same files, but in reverse, as follows.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;some-directory/cam1/*.fits&#39;</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">i</span> <span class="o">=</span> <span class="n">illustratefits</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;now it&#39;s backwards!&quot;</span><span class="p">)</span>
+<span class="n">i</span><span class="o">.</span><span class="n">animate</span><span class="p">(</span><span class="s1">&#39;_static/backwards-snazzy-little-movie.mp4&#39;</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Note that we&#8217;ve also changed a few other things in here too. We added a
+<code class="docutils literal"><span class="pre">title</span></code> to the illustration, and we changed the frame per second
+(<code class="docutils literal"><span class="pre">fps</span></code>) and the dots per inch (<code class="docutils literal"><span class="pre">dpi</span></code>) to use when writing the
+animation.</p>
+<video src='_static/backwards-snazzy-little-movie.mp4' controls loop></div>
+<div class="section" id="Animating-Multiple-Cameras-at-Once">
+<h2>Animating Multiple Cameras at Once<a class="headerlink" href="#Animating-Multiple-Cameras-at-Once" title="Permalink to this headline">¶</a></h2>
+<p>But what if you want to display more than one camera at the same time?
+The <code class="docutils literal"><span class="pre">illustratefits</span></code> will try to split out different cameras by
+looking for a string like <code class="docutils literal"><span class="pre">cam1</span></code> or <code class="docutils literal"><span class="pre">cam2</span></code> (etc...) in the FITS
+filenames. If it doesn&#8217;t find these, it will revert back to assuming
+everything is in a single camera.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">i</span> <span class="o">=</span> <span class="n">illustratefits</span><span class="p">(</span><span class="s1">&#39;some-directory/cam*/*.fits&#39;</span><span class="p">)</span>
+<span class="n">i</span><span class="o">.</span><span class="n">animate</span><span class="p">(</span><span class="s1">&#39;_static/a-snazzy-fourcamera-movie.mp4&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<video src='_static/a-snazzy-fourcamera-movie.mp4' controls loop></div>
+<div class="section" id="Magnifying-Part-of-the-Frame">
+<h2>Magnifying Part of the Frame<a class="headerlink" href="#Magnifying-Part-of-the-Frame" title="Permalink to this headline">¶</a></h2>
+<p>What if I want to zoom in on a particular region of an image? I can
+specify the zoom I would like via the <code class="docutils literal"><span class="pre">zoomposition</span></code> and <code class="docutils literal"><span class="pre">zoomsize</span></code>
+keywords, indicating the (x,y)=(col,row) position of the center of the
+zoom box, and the</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">i</span> <span class="o">=</span> <span class="n">illustratefits</span><span class="p">(</span><span class="s1">&#39;some-directory/cam1/*.fits&#39;</span><span class="p">,</span> <span class="n">zoomposition</span><span class="o">=</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">zoomsize</span><span class="o">=</span><span class="p">(</span><span class="mi">42</span><span class="p">,</span> <span class="mi">14</span><span class="p">))</span>
+<span class="n">i</span><span class="o">.</span><span class="n">animate</span><span class="p">(</span><span class="s1">&#39;_static/zoom-movies-are-snazzy-too.mp4&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<video src="_static/zoom-movies-are-snazzy-too.mp4" controls loop></video></div>
+<div class="section" id="Basic-Image-Processing">
+<h2>Basic Image Processing<a class="headerlink" href="#Basic-Image-Processing" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes, you might want to apply some processing to the images before
+displaying them. Several simple processes are defined via the
+<code class="docutils literal"><span class="pre">processingsteps</span></code> keyword, which must contain a list (something inside
+<code class="docutils literal"><span class="pre">[]</span></code>) of steps to be applied. The current options are
+<code class="docutils literal"><span class="pre">subtractmedian</span></code> and <code class="docutils literal"><span class="pre">subtractmean</span></code>. Be careful trying to use
+<code class="docutils literal"><span class="pre">subtractmedian</span></code> on large datasets &#8211; it requires reading the entire
+dataset into memory at once.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">i</span> <span class="o">=</span> <span class="n">illustratefits</span><span class="p">(</span><span class="s1">&#39;some-directory/cam*/*.fits&#39;</span><span class="p">,</span> <span class="n">processingsteps</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;subtractmedian&#39;</span><span class="p">])</span>
+<span class="n">i</span><span class="o">.</span><span class="n">animate</span><span class="p">(</span><span class="s1">&#39;_static/median-subtraction-reveals-sazzy-structures.mp4&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<video src="_static/median-subtraction-reveals-sazzy-structures.mp4" controls loop></video></div>
+<div class="section" id="Static-Illustrations">
+<h2>Static Illustrations<a class="headerlink" href="#Static-Illustrations" title="Permalink to this headline">¶</a></h2>
+<p>We can also simply plot a single time, and save that as a PDF.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">i</span> <span class="o">=</span> <span class="n">illustratefits</span><span class="p">(</span><span class="s1">&#39;some-directory/cam*/*0001.fits&#39;</span><span class="p">)</span>
+<span class="n">i</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">i</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;_static/a-snazzy-static-plot.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>That&#8217;s about it for the basic one-liner commands. If you want to do
+something more complicated, it will probably help to read on a bit more
+about the principle of how TESS Viewer illustrations are structured.</p>
+</div>
+<div class="section" id="Bug-Reports">
+<h2>Bug Reports<a class="headerlink" href="#Bug-Reports" title="Permalink to this headline">¶</a></h2>
+<p>You will probably encounter bugs as you play with this yourself. If so,
+please do not hesitate to contact <a class="reference external" href="mailto:zach&#46;bertathompson&#37;&#52;&#48;colorado&#46;edu">Zach
+Berta-Thompson</a>, or leave an issue
+on the <a class="reference external" href="http://tessgit.mit.edu/zkbt/playground">gitlab repository</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basics.html">Basic Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/.ipynb_checkpoints/quickstart-checkpoint.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Zach Berta-Thompson.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/.ipynb_checkpoints/quickstart-checkpoint.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>illumination.frames.ZoomFrame &#8212; illumination 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for illumination.frames.ZoomFrame</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">.imshowFrame</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">astropy.nddata.utils</span> <span class="k">import</span> <span class="n">Cutout2D</span>
+
+
+<div class="viewcode-block" id="ZoomFrame"><a class="viewcode-back" href="../../../api.html#illumination.frames.ZoomFrame">[docs]</a><span class="k">class</span> <span class="nc">ZoomFrame</span><span class="p">(</span><span class="n">imshowFrame</span><span class="p">):</span>
+    <span class="n">frametype</span> <span class="o">=</span> <span class="s1">&#39;Zoom&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>  <span class="n">source</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                        <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+                        <span class="n">name</span><span class="o">=</span><span class="s1">&#39;zoom&#39;</span><span class="p">,</span>
+                        <span class="n">cmapkw</span><span class="o">=</span><span class="p">{},</span>
+                        <span class="n">plotingredients</span><span class="o">=</span><span class="p">[</span>   <span class="s1">&#39;image&#39;</span><span class="p">,</span>
+                                            <span class="s1">&#39;colorbar&#39;</span><span class="p">],</span> <span class="c1">#&#39;arrows&#39;,&#39;title&#39;],</span>
+                        <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initialize a ZoomFrame that can display</span>
+<span class="sd">        images taken from a zoomed subset of</span>
+<span class="sd">        a `source` imshowFrame. This is kind</span>
+<span class="sd">        of like a magnifying class you can</span>
+<span class="sd">        drop down on an image.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        source : imshowFrame</span>
+<span class="sd">                A frame into which this one will be zooming.</span>
+
+<span class="sd">        position : (tuple)</span>
+<span class="sd">                The (x, y) = (col, row) position of the center of zoom.</span>
+
+<span class="sd">        shape : (tuple)</span>
+<span class="sd">                The (x, y) = (ncols, nrows) shape of the zoom.</span>
+
+<span class="sd">        name : str</span>
+<span class="sd">            A name to give this Frame.</span>
+
+<span class="sd">        ax : matplotlib.axes.Axes instance</span>
+<span class="sd">            All plotting will happen inside this ax.</span>
+<span class="sd">            If set to None, the `self.ax attribute` will</span>
+<span class="sd">            need to be set manually before plotting.</span>
+
+<span class="sd">        plotingredients : list</span>
+<span class="sd">            A list of keywords indicating features that will be</span>
+<span class="sd">            plotted in this frame. It can be modified either now</span>
+<span class="sd">            when initializing the frame, or any time before</span>
+<span class="sd">            calling `i.plot()` from the illustration.</span>
+
+<span class="sd">        cmapkw : dict</span>
+<span class="sd">            Dictionary of keywords to feed into the cmap generation.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">imshowFrame</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>  <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">plotingredients</span><span class="o">=</span><span class="n">plotingredients</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
+
+        <span class="c1"># cutout needs (row, col), but we want to give (x,y)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># set the aspect ratio (width/height) for this zoom frame</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aspectratio</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1">#width/height</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">titlefordisplay</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> | </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frametype</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmapkw</span> <span class="o">=</span> <span class="n">cmapkw</span>
+    <span class="k">def</span> <span class="nf">_get_times</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Get the available times associated with this frame.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">_get_times</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_find_timestep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Get the timestep, by using the source frame.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">_find_timestep</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Get the image at a given time (defaulting to the first time),</span>
+<span class="sd">        by pulling it from the source frame.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">bigimage</span><span class="p">,</span> <span class="n">actual_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">_get_image</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cutout</span> <span class="o">=</span> <span class="n">Cutout2D</span><span class="p">(</span><span class="n">bigimage</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">,</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;partial&#39;</span><span class="p">)</span>
+        <span class="n">cutoutimage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="o">.</span><span class="n">data</span>
+        <span class="k">return</span> <span class="n">cutoutimage</span><span class="p">,</span> <span class="n">actual_time</span>
+
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="c1"># do all the normal stuff for an imshow plot</span>
+        <span class="n">imshowFrame</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># add a box to the source image (cutout must have ben created, if plot has happened)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="o">.</span><span class="n">plot_on_original</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">ax</span><span class="p">,</span> <span class="n">clip_on</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Update this frame to a particular time (for use in animations).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># update the data, if we need to</span>
+        <span class="n">timestep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_timestep</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="n">image</span><span class="p">,</span> <span class="n">actual_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_image</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">timestep</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">currenttimestep</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;time&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">plotted</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_timestring</span><span class="p">(</span><span class="n">actual_time</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">currenttimestep</span> <span class="o">=</span> <span class="n">timestep</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Default string representation for this frame.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{}</span><span class="s1"> Frame | position=</span><span class="si">{}</span><span class="s1"> | size=</span><span class="si">{}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frametype</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../basics.html">Basic Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Zach Berta-Thompson.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
