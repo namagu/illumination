@@ -172,7 +172,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "<video src='_static/a-pair-of-frames.mp4' controls loop></video>"
+    "<video src='_static/a-pair-of-frames.mp4' controls loop width=100%></video>"
    ]
   },
   {
@@ -221,7 +221,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "<video src='_static/a-pair-of-frames-with-different-colorbars.mp4' controls loop></video>"
+    "<video src='_static/a-pair-of-frames-with-different-colorbars.mp4' controls loop width=100%></video>"
    ]
   },
   {
@@ -273,7 +273,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "<video src='_static/an-example-of-a-zoom.mp4' controls loop>An example of a zoom movie.</video>"
+    "<video src='_static/an-example-of-a-zoom.mp4' controls loop width=100%>An example of a zoom movie.</video>"
    ]
   },
   {
@@ -311,7 +311,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "<video src='_static/an-example-of-a-more-complicated-zoom.mp4' controls loop>An example of a more complicated zoom movie.</video>"
+    "<video src='_static/an-example-of-a-more-complicated-zoom.mp4' controls loop width=100%>An example of a more complicated zoom movie.</video>"
    ]
   },
   {
@@ -362,7 +362,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "<video src='_static/an-example-of-a-timeseries.mp4' controls loop>An example movie with a time-series linked to the movie.</video>"
+    "<video src='_static/an-example-of-a-timeseries.mp4' controls loop width=100%>An example movie with a time-series linked to the movie.</video>"
    ]
   },
   {
