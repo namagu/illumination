@@ -209,13 +209,6 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "<img src='_static/a-snazzy-static-plot.png' width=75%>"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
     "<img src='_static/a-snazzy-static-plot.png'>"
    ]
   },
@@ -227,7 +220,7 @@
     "\n",
     "## Bug Reports\n",
     "\n",
-    "You will probably encounter bugs as you play with this yourself. If so, please do not hesitate to contact [Zach Berta-Thompson](zach.bertathompson@colorado.edu), or leave an issue on the [gitlab repository](http://tessgit.mit.edu/zkbt/playground)."
+    "You will probably encounter bugs as you play with this yourself. If so, please do not hesitate to contact [Zach Berta-Thompson](https://github.com/zkbt/), or leave an issue on the [github repository](https://github.com/zkbt/illumination)."
    ]
   }
  ],

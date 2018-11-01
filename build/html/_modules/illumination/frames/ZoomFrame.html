@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>illumination.frames.ZoomFrame &#8212; illumination 0.0.0 documentation</title>
+    <title>illumination.frames.ZoomFrame &#8212; illumination 0.0.6 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.0.0',
+        VERSION:     '0.0.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -53,7 +53,7 @@
                         <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
                         <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
                         <span class="n">name</span><span class="o">=</span><span class="s1">&#39;zoom&#39;</span><span class="p">,</span>
-                        <span class="n">cmapkw</span><span class="o">=</span><span class="p">{},</span>
+                        <span class="n">cmapkw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
                         <span class="n">plotingredients</span><span class="o">=</span><span class="p">[</span>   <span class="s1">&#39;image&#39;</span><span class="p">,</span>
                                             <span class="s1">&#39;colorbar&#39;</span><span class="p">],</span> <span class="c1">#&#39;arrows&#39;,&#39;title&#39;],</span>
                         <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -107,7 +107,8 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">titlefordisplay</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> | </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frametype</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">cmapkw</span> <span class="o">=</span> <span class="n">cmapkw</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmapkw</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">cmapkw</span><span class="p">)</span> <span class="c1"># why do I have to do this?</span>
+
     <span class="k">def</span> <span class="nf">_get_times</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Get the available times associated with this frame.</span>

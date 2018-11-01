@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>illumination.sequences.FITS_Sequence &#8212; illumination 0.0.0 documentation</title>
+    <title>illumination.sequences.FITS_Sequence &#8212; illumination 0.0.6 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.0.0',
+        VERSION:     '0.0.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -50,6 +50,8 @@
 <span class="kn">from</span> <span class="nn">.filenameparsers</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.Image_Sequence</span> <span class="k">import</span> <span class="o">*</span>
 
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;FITS_Sequence&#39;</span><span class="p">]</span>
+
 <div class="viewcode-block" id="FITS_Sequence"><a class="viewcode-back" href="../../../api.html#illumination.sequences.FITS_Sequence">[docs]</a><span class="k">class</span> <span class="nc">FITS_Sequence</span><span class="p">(</span><span class="n">Image_Sequence</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    A sequence of FITS images, with a time associated with each.</span>
@@ -64,7 +66,6 @@
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Initialize a Sequence of FITS images. The goal is</span>
 <span class="sd">        to create a list of FITS HDUs, one for each time.</span>
-
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -143,8 +144,8 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">ext_primary</span> <span class="o">=</span> <span class="n">ext_primary</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ext_image</span> <span class="o">=</span> <span class="n">ext_image</span>
-        <span class="c1"># if len(self.hdulists) &gt; 0:</span>
-        <span class="c1">#	self.ext_image = np.minimum(self.ext_image, len(self.hdulists[0]))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        	<span class="bp">self</span><span class="o">.</span><span class="n">ext_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ext_image</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_hdulist</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">temporal</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">static</span> <span class="o">=</span> <span class="p">{}</span>
@@ -300,14 +301,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_timeisfake</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="c1"># try to pull out a specific key</span>
-        <span class="k">if</span> <span class="n">timekey</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">assert</span><span class="p">(</span><span class="n">timekey</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">Time</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temporal</span><span class="p">[</span><span class="n">timekey</span><span class="p">]),</span>
                         <span class="nb">format</span><span class="o">=</span><span class="n">timeformat</span> <span class="ow">or</span> <span class="s1">&#39;gps&#39;</span><span class="p">,</span>
                         <span class="n">scale</span><span class="o">=</span><span class="n">timescale</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">speak</span><span class="p">(</span><span class="s1">&#39;using &quot;</span><span class="si">{}</span><span class="s1">&quot; as the time axis&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">timekey</span><span class="p">))</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">AssertionError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span>
             <span class="c1"># try to pull a time axis from these</span>
-            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;TIME&#39;</span><span class="p">,</span> <span class="s1">&#39;MJD&#39;</span><span class="p">,</span> <span class="s1">&#39;JD&#39;</span><span class="p">,</span> <span class="s1">&#39;BJD&#39;</span><span class="p">,</span> <span class="s1">&#39;BJD_TDB&#39;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;TIME&#39;</span><span class="p">,</span> <span class="s1">&#39;MJD&#39;</span><span class="p">,</span> <span class="s1">&#39;JD&#39;</span><span class="p">,</span> <span class="s1">&#39;BJD&#39;</span><span class="p">,</span> <span class="s1">&#39;BJD_TDB&#39;</span><span class="p">,</span> <span class="s1">&#39;DATE-OBS&#39;</span><span class="p">]:</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="c1"># treat some value as a time</span>
                     <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temporal</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>

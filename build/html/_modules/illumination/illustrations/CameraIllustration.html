@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>illumination.illustrations.CameraIllustration &#8212; illumination 0.0.0 documentation</title>
+    <title>illumination.illustrations.CameraIllustration &#8212; illumination 0.0.6 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.0.0',
+        VERSION:     '0.0.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -65,7 +65,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        data : various</span>
 <span class="sd">            Anything that can initialize a sequence with</span>
-<span class="sd">            the make_sequence() helper function.</span>
+<span class="sd">            the make_image_sequence() helper function.</span>
 
 <span class="sd">            or</span>
 
@@ -106,7 +106,7 @@
         <span class="c1"># create a CameraFrame for this camera</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="s1">&#39;camera&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">CameraFrame</span><span class="p">(</span><span class="n">illustration</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
                                             <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-                                            <span class="n">data</span><span class="o">=</span><span class="n">make_sequence</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
+                                            <span class="n">data</span><span class="o">=</span><span class="n">make_image_sequence</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
                                             <span class="o">**</span><span class="n">framekw</span><span class="p">)</span></div>
 </pre></div>
 

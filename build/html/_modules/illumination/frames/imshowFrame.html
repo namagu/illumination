@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>illumination.frames.imshowFrame &#8212; illumination 0.0.0 documentation</title>
+    <title>illumination.frames.imshowFrame &#8212; illumination 0.0.6 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.0.0',
+        VERSION:     '0.0.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -44,7 +44,7 @@
   <h1>Source code for illumination.frames.imshowFrame</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">.FrameBase</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">..colors</span> <span class="k">import</span> <span class="n">cmap_norm_ticks</span>
-<span class="kn">from</span> <span class="nn">..sequences</span> <span class="k">import</span> <span class="n">make_sequence</span>
+<span class="kn">from</span> <span class="nn">..sequences</span> <span class="k">import</span> <span class="n">make_image_sequence</span>
 
 
 <div class="viewcode-block" id="imshowFrame"><a class="viewcode-back" href="../../../api.html#illumination.frames.imshowFrame">[docs]</a><span class="k">class</span> <span class="nc">imshowFrame</span><span class="p">(</span><span class="n">FrameBase</span><span class="p">):</span>
@@ -71,7 +71,7 @@
                                     <span class="s1">&#39;title&#39;</span><span class="p">],</span> <span class="c1"># other options might be &#39;filename&#39;, &#39;axes&#39;, what else?</span>
                  <span class="n">processingsteps</span><span class="o">=</span><span class="p">[],</span>
                  <span class="n">firstframe</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">cmapkw</span><span class="o">=</span><span class="p">{},</span>
+                 <span class="n">cmapkw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
                  <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Initialize this imshowFrame, will can show a sequence of 2D images.</span>
@@ -113,7 +113,7 @@
                                  <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="c1"># ensure that the data are a sequence of images</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">make_sequence</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">make_image_sequence</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="c1"># if there&#39;s an image, use it to set the size</span>
         <span class="k">try</span><span class="p">:</span>
@@ -132,7 +132,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">titlefordisplay</span> <span class="o">=</span> <span class="n">title</span>
 
         <span class="c1"># keep track of an extra keywords for generating the cmaps</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cmapkw</span> <span class="o">=</span> <span class="n">cmapkw</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmapkw</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">cmapkw</span><span class="p">)</span> <span class="c1"># why do I have to do this?</span>
 
         <span class="c1"># are there steps to apply to the image before displaying?</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">processingsteps</span> <span class="o">=</span> <span class="n">processingsteps</span>

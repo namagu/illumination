@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>illumination.illustrations.SingleCameraWithZoomIllustration &#8212; illumination 0.0.0 documentation</title>
+    <title>illumination.illustrations.SingleCameraWithZoomIllustration &#8212; illumination 0.0.6 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.0.0',
+        VERSION:     '0.0.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -57,12 +57,12 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">[],</span> <span class="n">zoomposition</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">zoomsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        **kwargs are passed to both make_sequence and the frames</span>
+<span class="sd">        **kwargs are passed to both make_image_sequence and the frames</span>
 <span class="sd">        &#39;&#39;&#39;</span>
 
         <span class="c1"># create a CameraFrame for this camera</span>
         <span class="n">i_camera</span> <span class="o">=</span> <span class="n">CameraFrame</span><span class="p">(</span> <span class="n">illustration</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
-                                <span class="n">data</span><span class="o">=</span><span class="n">make_sequence</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span>
+                                <span class="n">data</span><span class="o">=</span><span class="n">make_image_sequence</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span>
                                 <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="c1"># add the ZoomFrame, connected to the camera</span>

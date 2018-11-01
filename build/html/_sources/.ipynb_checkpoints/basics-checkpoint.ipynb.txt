@@ -41,7 +41,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "The `make_sequence` function is a general wrapper that does a decent job of figuring out what kind of sequence should be made out of the given inputs."
+    "The `make_image_sequence` function is a general wrapper that does a decent job of figuring out what kind of sequence should be made out of the given inputs."
    ]
   },
   {
@@ -50,14 +50,14 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "seq = make_sequence(stamp)"
+    "seq = make_image_sequence(stamp)"
    ]
   },
   {
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "`make_sequence` should be able to handle at least the following types of input:\n",
+    "`make_image_sequence` should be able to handle at least the following types of input:\n",
     "    + single FITS filename, and an `ext_image=` keyword for the extension to use\n",
     "    + list of FITS filenames, and an `ext_image=` keyword\n",
     "    + a glob pattern to search for FITS files, and an `ext_image=` keyword \n",
@@ -263,7 +263,7 @@
    "outputs": [],
    "source": [
     "# first create a sequence\n",
-    "big = make_sequence(create_test_stamp(N=10, xsize=80, ysize=100))\n",
+    "big = make_image_sequence(create_test_stamp(N=10, xsize=80, ysize=100))\n",
     "\n",
     "# then define some frames\n",
     "image = imshowFrame(name='big-image', data=big, title='imshow')\n",
@@ -298,7 +298,7 @@
    "outputs": [],
    "source": [
     "# first create a sequence\n",
-    "big = make_sequence(create_test_stamp(N=10, xsize=80, ysize=100))\n",
+    "big = make_image_sequence(create_test_stamp(N=10, xsize=80, ysize=100))\n",
     "\n",
     "# then define some frames\n",
     "image = imshowFrame(name='big-image', data=big, title='imshow')\n",
@@ -337,7 +337,7 @@
    "outputs": [],
    "source": [
     "# make a dataset\n",
-    "star = make_sequence(create_test_stamp(N=25, xsize=10, ysize=10, single=True))\n",
+    "star = make_image_sequence(create_test_stamp(N=25, xsize=10, ysize=10, single=True))\n",
     "\n",
     "# create an empty time-series frame into which we will plot a timeseries\n",
     "lightcurve = EmptyTimeseriesFrame(name='timeseries')\n",
@@ -378,7 +378,7 @@
    "source": [
     "The interface for plotting timeseries is still a little buggy and may change soon. For now, hopefully you find this helpful! \n",
     "\n",
-    "Some more examples are included, in one way or another, in the `tests/` directory of the `playground` repository. Check those out, or please feel free to contribute new examples here! As always, please do not hesitate to contact [Zach Berta-Thompson](zach.bertathompson@colorado.edu) or leave an issue on the [gitlab repository](http://tessgit.mit.edu/zkbt/playground)."
+    "Some more examples are included, in one way or another, in the `tests/` directory of the `playground` repository. Check those out, or please feel free to contribute new examples here! As always, please do not hesitate to contact [Zach Berta-Thompson](https://github.com/zkbt/) or leave an issue on the [github repository](https://github.com/zkbt/illumination)."
    ]
   }
  ],

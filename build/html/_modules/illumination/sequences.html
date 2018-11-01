@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>illumination.sequences &#8212; illumination 0.0.0 documentation</title>
+    <title>illumination.sequences &#8212; illumination 0.0.6 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.0.0',
+        VERSION:     '0.0.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -47,8 +47,9 @@
 <span class="kn">from</span> <span class="nn">.Stamp_Sequence</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.TPF_Sequence</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.Timeseries_Sequence</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.filenameparsers</span> <span class="k">import</span> <span class="o">*</span>
 
-<div class="viewcode-block" id="make_sequence"><a class="viewcode-back" href="../../api.html#illumination.sequences.make_sequence">[docs]</a><span class="k">def</span> <span class="nf">make_sequence</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="make_image_sequence"><a class="viewcode-back" href="../../api.html#illumination.sequences.make_image_sequence">[docs]</a><span class="k">def</span> <span class="nf">make_image_sequence</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Initialize a Sequence for viewing with tv.</span>
 
@@ -80,12 +81,14 @@
     <span class="c1"># is it already a sequence?</span>
     <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">initial</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">initial</span>
-    <span class="c1"># is it empty?</span>
+    <span class="c1"># is it empty? return an empty sequence</span>
     <span class="k">elif</span> <span class="n">initial</span> <span class="ow">is</span> <span class="p">[]</span> <span class="ow">or</span> <span class="n">initial</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">Sequence</span><span class="p">()</span>
     <span class="c1"># is it a Stamp?</span>
     <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">initial</span><span class="p">)</span> <span class="o">==</span> <span class="n">Stamp</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">Stamp_Sequence</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">initial</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Image_Sequence</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># try:</span>
         <span class="c1">#	# is initial a 1D thing?</span>

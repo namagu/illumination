@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Basic Principles &#8212; illumination 0.0.0 documentation</title>
+    <title>Basic Principles &#8212; illumination 0.0.6 documentation</title>
     
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.0.0',
+        VERSION:     '0.0.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -240,26 +240,26 @@ make a <code class="docutils literal"><span class="pre">Sequence</span></code> o
 </pre></div>
 </div>
 </div>
-<p>The <code class="docutils literal"><span class="pre">make_sequence</span></code> function is a general wrapper that does a decent
-job of figuring out what kind of sequence should be made out of the
-given inputs.</p>
+<p>The <code class="docutils literal"><span class="pre">make_image_sequence</span></code> function is a general wrapper that does a
+decent job of figuring out what kind of sequence should be made out of
+the given inputs.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">seq</span> <span class="o">=</span> <span class="n">make_sequence</span><span class="p">(</span><span class="n">stamp</span><span class="p">)</span>
+<span></span><span class="n">seq</span> <span class="o">=</span> <span class="n">make_image_sequence</span><span class="p">(</span><span class="n">stamp</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<p><code class="docutils literal"><span class="pre">make_sequence</span></code> should be able to handle at least the following types
-of input: + single FITS filename, and an <code class="docutils literal"><span class="pre">ext_image=</span></code> keyword for the
-extension to use + list of FITS filenames, and an <code class="docutils literal"><span class="pre">ext_image=</span></code> keyword
-+ a glob pattern to search for FITS files, and an <code class="docutils literal"><span class="pre">ext_image=</span></code> keyword
-+ single FITS HDUList, and an <code class="docutils literal"><span class="pre">ext_image=</span></code> keyword + list of loaded
-FITS HDULists, and an <code class="docutils literal"><span class="pre">ext_image=</span></code> keyword + a Stamp object from the
-<code class="docutils literal"><span class="pre">cosmics</span></code> package</p>
+<p><code class="docutils literal"><span class="pre">make_image_sequence</span></code> should be able to handle at least the following
+types of input: + single FITS filename, and an <code class="docutils literal"><span class="pre">ext_image=</span></code> keyword
+for the extension to use + list of FITS filenames, and an <code class="docutils literal"><span class="pre">ext_image=</span></code>
+keyword + a glob pattern to search for FITS files, and an <code class="docutils literal"><span class="pre">ext_image=</span></code>
+keyword + single FITS HDUList, and an <code class="docutils literal"><span class="pre">ext_image=</span></code> keyword + list of
+loaded FITS HDULists, and an <code class="docutils literal"><span class="pre">ext_image=</span></code> keyword + a Stamp object
+from the <code class="docutils literal"><span class="pre">cosmics</span></code> package</p>
 <p>Each <code class="docutils literal"><span class="pre">sequence</span></code> has a <code class="docutils literal"><span class="pre">.time</span></code> attribute. It is an <code class="docutils literal"><span class="pre">astropy.time</span></code>
 object, and can be indexed as an array. If times are fake (for example,
 if they are simply image number or cadence number), then we pretend
@@ -421,7 +421,7 @@ in the quickstart.</p>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># first create a sequence</span>
-<span class="n">big</span> <span class="o">=</span> <span class="n">make_sequence</span><span class="p">(</span><span class="n">create_test_stamp</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">xsize</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">ysize</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
+<span class="n">big</span> <span class="o">=</span> <span class="n">make_image_sequence</span><span class="p">(</span><span class="n">create_test_stamp</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">xsize</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">ysize</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
 
 <span class="c1"># then define some frames</span>
 <span class="n">image</span> <span class="o">=</span> <span class="n">imshowFrame</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;big-image&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">big</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;imshow&#39;</span><span class="p">)</span>
@@ -450,7 +450,7 @@ layout.</p>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># first create a sequence</span>
-<span class="n">big</span> <span class="o">=</span> <span class="n">make_sequence</span><span class="p">(</span><span class="n">create_test_stamp</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">xsize</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">ysize</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
+<span class="n">big</span> <span class="o">=</span> <span class="n">make_image_sequence</span><span class="p">(</span><span class="n">create_test_stamp</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">xsize</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">ysize</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
 
 <span class="c1"># then define some frames</span>
 <span class="n">image</span> <span class="o">=</span> <span class="n">imshowFrame</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;big-image&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">big</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;imshow&#39;</span><span class="p">)</span>
@@ -488,7 +488,7 @@ using its built-in <code class="docutils literal"><span class="pre">.plot</span>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># make a dataset</span>
-<span class="n">star</span> <span class="o">=</span> <span class="n">make_sequence</span><span class="p">(</span><span class="n">create_test_stamp</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">xsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">ysize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">single</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="n">star</span> <span class="o">=</span> <span class="n">make_image_sequence</span><span class="p">(</span><span class="n">create_test_stamp</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">xsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">ysize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">single</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 
 <span class="c1"># create an empty time-series frame into which we will plot a timeseries</span>
 <span class="n">lightcurve</span> <span class="o">=</span> <span class="n">EmptyTimeseriesFrame</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;timeseries&#39;</span><span class="p">)</span>
@@ -523,9 +523,9 @@ change soon. For now, hopefully you find this helpful!</p>
 <p>Some more examples are included, in one way or another, in the
 <code class="docutils literal"><span class="pre">tests/</span></code> directory of the <code class="docutils literal"><span class="pre">playground</span></code> repository. Check those out,
 or please feel free to contribute new examples here! As always, please
-do not hesitate to contact <a class="reference external" href="mailto:zach&#46;bertathompson&#37;&#52;&#48;colorado&#46;edu">Zach
-Berta-Thompson</a> or leave an issue on
-the <a class="reference external" href="http://tessgit.mit.edu/zkbt/playground">gitlab repository</a>.</p>
+do not hesitate to contact <a class="reference external" href="https://github.com/zkbt/">Zach
+Berta-Thompson</a> or leave an issue on the
+<a class="reference external" href="https://github.com/zkbt/illumination">github repository</a>.</p>
 </div>
 </div>
 </div>

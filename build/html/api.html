@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API &#8212; illumination 0.0.0 documentation</title>
+    <title>API &#8212; illumination 0.0.6 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.0.0',
+        VERSION:     '0.0.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -52,8 +52,8 @@ and all illustrations inherit from the <code class="xref py py-class docutils li
 <h2>Sequences<a class="headerlink" href="#sequences" title="Permalink to this headline">¶</a></h2>
 <p>All these sequences keep track of timed datasets.</p>
 <span class="target" id="module-illumination.sequences"></span><dl class="function">
-<dt id="illumination.sequences.make_sequence">
-<code class="descclassname">illumination.sequences.</code><code class="descname">make_sequence</code><span class="sig-paren">(</span><em>initial</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/sequences.html#make_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.sequences.make_sequence" title="Permalink to this definition">¶</a></dt>
+<dt id="illumination.sequences.make_image_sequence">
+<code class="descclassname">illumination.sequences.</code><code class="descname">make_image_sequence</code><span class="sig-paren">(</span><em>initial</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/sequences.html#make_image_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.sequences.make_image_sequence" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize a Sequence for viewing with tv.</p>
 <p>This is a general wrapper that <em>tries</em> to
 guess what kind of Sequence to make,
@@ -1190,7 +1190,7 @@ check it out for more options.</p>
 
 <dl class="class">
 <dt id="illumination.frames.CCDFrame">
-<em class="property">class </em><code class="descclassname">illumination.frames.</code><code class="descname">CCDFrame</code><span class="sig-paren">(</span><em>name='ccd'</em>, <em>ax=None</em>, <em>data=None</em>, <em>camera=&lt;camera Frame | data=&lt;sequence of 0 images&gt; | name=camera&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/frames/CCDFrame.html#CCDFrame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.frames.CCDFrame" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">illumination.frames.</code><code class="descname">CCDFrame</code><span class="sig-paren">(</span><em>name='ccd'</em>, <em>ax=None</em>, <em>data=None</em>, <em>camera=&lt;camera Frame | data=&lt;sequence of 0 elements&gt; | name=camera&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/frames/CCDFrame.html#CCDFrame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.frames.CCDFrame" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is an imshowFrame associated with one CCD. It can
 transform from CCD coordinates to Camera coordinates.</p>
 <p>A single CCD can be created on its own, but more often
@@ -1525,7 +1525,7 @@ This should be called after illustration.plot()</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
 <dt><strong>data</strong></dt>
  <span class="classifier-delimiter">:</span> <span class="classifier">various</span><dd><p class="first">Anything that can initialize a sequence with
-the make_sequence() helper function.</p>
+the make_image_sequence() helper function.</p>
 <p>or</p>
 <p class="last">a dictionary with keys of &#8216;ccd1&#8217;, &#8216;ccd2&#8217;, &#8216;ccd3&#8217;, &#8216;ccd4&#8217;
 that each contain something that can initialize a sequence</p>
@@ -1629,7 +1629,7 @@ that each contain something that can initialize a sequence</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
 <dt><strong>cam1, etc...</strong></dt>
  <span class="classifier-delimiter">:</span> <span class="classifier">various</span><dd><p class="first last">Anything that can initialize a sequence with
-the make_sequence() helper function.</p>
+the make_image_sequence() helper function.</p>
 </dd>
 <dt><strong>orientation</strong></dt>
  <span class="classifier-delimiter">:</span> <span class="classifier">str</span><dd><p class="first last">&#8216;horizontal&#8217; = camera 2 is right of camera 1
@@ -1721,7 +1721,7 @@ the make_sequence() helper function.</p>
 </tr>
 </tbody>
 </table>
-<p><a href="#id20"><span class="problematic" id="id21">**</span></a>kwargs are passed to both make_sequence and the frames</p>
+<p><a href="#id20"><span class="problematic" id="id21">**</span></a>kwargs are passed to both make_image_sequence and the frames</p>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>
