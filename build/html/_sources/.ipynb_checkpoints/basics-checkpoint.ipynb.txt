@@ -57,13 +57,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "`make_image_sequence` should be able to handle at least the following types of input:\n",
-    "    + single FITS filename, and an `ext_image=` keyword for the extension to use\n",
-    "    + list of FITS filenames, and an `ext_image=` keyword\n",
-    "    + a glob pattern to search for FITS files, and an `ext_image=` keyword \n",
-    "    + single FITS HDUList, and an `ext_image=` keyword \n",
-    "    + list of loaded FITS HDULists, and an `ext_image=` keyword \n",
-    "    + a Stamp object from the `cosmics` package"
+    "`make_image_sequence` should be able to handle at least the following types of input (a) single FITS filename, and an `ext_image=` keyword for the extension to use, (b) list of FITS filenames, and an `ext_image=` keyword, (c) a glob pattern to search for FITS files, and an `ext_image=` keyword, (d) single FITS HDUList, and an `ext_image=` keyword, (e) list of loaded FITS HDULists, and an `ext_image=` keyword, and (f) a Stamp object from the `cosmics` package."
    ]
   },
   {
@@ -272,8 +266,7 @@
     "# then populate an illustration with them\n",
     "i = GenericIllustration(imshows=[image, zoom])\n",
     "i.plot()\n",
-    "#i.animate('_static/an-example-of-a-zoom.mp4', dpi=75)\n",
-    "f = i.frames['big-image']"
+    "i.animate('_static/an-example-of-a-zoom.mp4', dpi=75)"
    ]
   },
   {

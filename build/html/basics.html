@@ -256,12 +256,13 @@ the given inputs.</p>
 </div>
 </div>
 <p><code class="docutils literal"><span class="pre">make_image_sequence</span></code> should be able to handle at least the following
-types of input: + single FITS filename, and an <code class="docutils literal"><span class="pre">ext_image=</span></code> keyword
-for the extension to use + list of FITS filenames, and an <code class="docutils literal"><span class="pre">ext_image=</span></code>
-keyword + a glob pattern to search for FITS files, and an <code class="docutils literal"><span class="pre">ext_image=</span></code>
-keyword + single FITS HDUList, and an <code class="docutils literal"><span class="pre">ext_image=</span></code> keyword + list of
-loaded FITS HDULists, and an <code class="docutils literal"><span class="pre">ext_image=</span></code> keyword + a Stamp object
-from the <code class="docutils literal"><span class="pre">cosmics</span></code> package</p>
+types of input (a) single FITS filename, and an <code class="docutils literal"><span class="pre">ext_image=</span></code> keyword
+for the extension to use, (b) list of FITS filenames, and an
+<code class="docutils literal"><span class="pre">ext_image=</span></code> keyword, (c) a glob pattern to search for FITS files, and
+an <code class="docutils literal"><span class="pre">ext_image=</span></code> keyword, (d) single FITS HDUList, and an
+<code class="docutils literal"><span class="pre">ext_image=</span></code> keyword, (e) list of loaded FITS HDULists, and an
+<code class="docutils literal"><span class="pre">ext_image=</span></code> keyword, and (f) a Stamp object from the <code class="docutils literal"><span class="pre">cosmics</span></code>
+package.</p>
 <p>Each <code class="docutils literal"><span class="pre">sequence</span></code> has a <code class="docutils literal"><span class="pre">.time</span></code> attribute. It is an <code class="docutils literal"><span class="pre">astropy.time</span></code>
 object, and can be indexed as an array. If times are fake (for example,
 if they are simply image number or cadence number), then we pretend
@@ -432,8 +433,7 @@ in the quickstart.</p>
 <span class="c1"># then populate an illustration with them</span>
 <span class="n">i</span> <span class="o">=</span> <span class="n">GenericIllustration</span><span class="p">(</span><span class="n">imshows</span><span class="o">=</span><span class="p">[</span><span class="n">image</span><span class="p">,</span> <span class="n">zoom</span><span class="p">])</span>
 <span class="n">i</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-<span class="c1">#i.animate(&#39;_static/an-example-of-a-zoom.mp4&#39;, dpi=75)</span>
-<span class="n">f</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="s1">&#39;big-image&#39;</span><span class="p">]</span>
+<span class="n">i</span><span class="o">.</span><span class="n">animate</span><span class="p">(</span><span class="s1">&#39;_static/an-example-of-a-zoom.mp4&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">75</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
