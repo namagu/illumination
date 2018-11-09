@@ -166,7 +166,7 @@
    "source": [
     "## Basic Image Processing\n",
     "\n",
-    "Sometimes, you might want to apply some processing to the images before displaying them. Several simple processes are defined via the `processingsteps` keyword, which must contain a list (something inside `[]`) of steps to be applied. The current options are `subtractmedian` and `subtractmean`. Be careful trying to use `subtractmedian` on large datasets -- it requires reading the entire dataset into memory at once."
+    "Sometimes, you might want to apply some processing to the images before displaying them. Several simple processes are defined via the `processingsteps` keyword, which must contain a list (something inside `[]`) of steps to be applied. The current options are `subtractmedian` (subtract the median image), `subtractmean` (subtract the mean image), and `subtractprevious` (subtract the previous image from the current image). Be careful trying to use `subtractmedian` on large datasets -- it requires reading the entire dataset into memory at once."
    ]
   },
   {

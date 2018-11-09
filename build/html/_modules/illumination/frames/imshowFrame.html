@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>illumination.frames.imshowFrame &#8212; illumination 0.0.6 documentation</title>
+    <title>illumination.frames.imshowFrame &#8212; illumination 0.0.8 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.0.6',
+        VERSION:     '0.0.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -302,7 +302,6 @@
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;image&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotingredients</span><span class="p">):</span><span class="c1"># and (image is not None):</span>
 
             <span class="c1"># pull out the cmap, normalization, and suggested ticks</span>
-
             <span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="p">,</span> <span class="n">ticks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cmap_norm_ticks</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">cmapkw</span><span class="p">)</span>
 
             <span class="c1"># display the image for this frame</span>
@@ -364,19 +363,27 @@
             <span class="n">timestep</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">currenttimestep</span> <span class="o">=</span> <span class="n">timestep</span></div>
 
-<div class="viewcode-block" id="imshowFrame.process_image"><a class="viewcode-back" href="../../../api.html#illumination.frames.imshowFrame.process_image">[docs]</a>    <span class="k">def</span> <span class="nf">process_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+<div class="viewcode-block" id="imshowFrame.get_processed_image"><a class="viewcode-back" href="../../../api.html#illumination.frames.imshowFrame.get_processed_image">[docs]</a>    <span class="k">def</span> <span class="nf">get_processed_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timestep</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Apply any extra processing steps to the image</span>
-<span class="sd">        (subract a median image, normalize, mask, ???)</span>
+<span class="sd">        Get the image, and apply any extra processing</span>
+<span class="sd">        steps to it (subtract differences, normalize,</span>
+<span class="sd">        subtract smooth backgrounds, etc...?)</span>
 <span class="sd">        &#39;&#39;&#39;</span>
 
+        <span class="c1"># pull out the raw image</span>
+        <span class="n">rawimage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">timestep</span><span class="p">]</span>
+        <span class="k">assert</span><span class="p">(</span><span class="n">rawimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="s1">&#39;subtractmedian&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">processingsteps</span><span class="p">:</span>
-            <span class="n">processedimage</span> <span class="o">=</span> <span class="n">image</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+            <span class="n">processedimage</span> <span class="o">=</span> <span class="n">rawimage</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
             <span class="c1">#self.speak(&#39;subtracted median image&#39;)</span>
         <span class="k">elif</span> <span class="s1">&#39;subtractmean&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">processingsteps</span><span class="p">:</span>
-            <span class="n">processedimage</span> <span class="o">=</span> <span class="n">image</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            <span class="n">processedimage</span> <span class="o">=</span> <span class="n">rawimage</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="s1">&#39;subtractprevious&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">processingsteps</span><span class="p">:</span>
+            <span class="n">comparison</span> <span class="o">=</span> <span class="n">timestep</span> <span class="o">-</span> <span class="mi">1</span> <span class="c1">#this wraps at the end</span>
+            <span class="n">processedimage</span> <span class="o">=</span> <span class="n">rawimage</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">comparison</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">processedimage</span> <span class="o">=</span> <span class="n">image</span>
+            <span class="n">processedimage</span> <span class="o">=</span> <span class="n">rawimage</span>
         <span class="k">return</span> <span class="n">processedimage</span></div>
 
     <span class="k">def</span> <span class="nf">_get_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -388,10 +395,8 @@
             <span class="k">if</span> <span class="n">time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_times</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">timestep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_timestep</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
-            <span class="n">rawimage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">timestep</span><span class="p">]</span>
-            <span class="k">assert</span><span class="p">(</span><span class="n">rawimage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
 
-            <span class="n">processedimage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_image</span><span class="p">(</span><span class="n">rawimage</span><span class="p">)</span>
+            <span class="n">processedimage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_processed_image</span><span class="p">(</span><span class="n">timestep</span><span class="p">)</span>
             <span class="n">image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transformimage</span><span class="p">(</span><span class="n">processedimage</span><span class="p">)</span>
             <span class="n">actual_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_times</span><span class="p">()[</span><span class="n">timestep</span><span class="p">]</span>
             <span class="c1"># self.speak(&quot; &quot;)</span>

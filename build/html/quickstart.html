@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Quickstart &#8212; illumination 0.0.6 documentation</title>
+    <title>Quickstart &#8212; illumination 0.0.8 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.0.6',
+        VERSION:     '0.0.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -331,7 +331,9 @@ zoom box, and the</p>
 displaying them. Several simple processes are defined via the
 <code class="docutils literal"><span class="pre">processingsteps</span></code> keyword, which must contain a list (something inside
 <code class="docutils literal"><span class="pre">[]</span></code>) of steps to be applied. The current options are
-<code class="docutils literal"><span class="pre">subtractmedian</span></code> and <code class="docutils literal"><span class="pre">subtractmean</span></code>. Be careful trying to use
+<code class="docutils literal"><span class="pre">subtractmedian</span></code> (subtract the median image), <code class="docutils literal"><span class="pre">subtractmean</span></code>
+(subtract the mean image), and <code class="docutils literal"><span class="pre">subtractprevious</span></code> (subtract the
+previous image from the current image). Be careful trying to use
 <code class="docutils literal"><span class="pre">subtractmedian</span></code> on large datasets &#8211; it requires reading the entire
 dataset into memory at once.</p>
 <div class="nbinput nblast docutils container">

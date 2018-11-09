@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API &#8212; illumination 0.0.6 documentation</title>
+    <title>API &#8212; illumination 0.0.8 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.0.6',
+        VERSION:     '0.0.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -635,13 +635,13 @@ calling <cite>i.plot()</cite> from the illustration.</p>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">draw_arrows</span></code></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get_processed_image</span></code></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">process_image</span></code></td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
@@ -722,13 +722,13 @@ calling <cite>i.plot()</cite> from the illustration.</p>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">draw_arrows</span></code></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get_processed_image</span></code></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">process_image</span></code></td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
@@ -772,6 +772,14 @@ the +x and +y directions.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="illumination.frames.imshowFrame.get_processed_image">
+<code class="descname">get_processed_image</code><span class="sig-paren">(</span><em>timestep</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/frames/imshowFrame.html#imshowFrame.get_processed_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.frames.imshowFrame.get_processed_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the image, and apply any extra processing
+steps to it (subtract differences, normalize,
+subtract smooth backgrounds, etc...?)</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="illumination.frames.imshowFrame.plot">
 <code class="descname">plot</code><span class="sig-paren">(</span><em>time=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/frames/imshowFrame.html#imshowFrame.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.frames.imshowFrame.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate the (initial) plot for this frame.</p>
@@ -791,13 +799,6 @@ through the .ax (the plotted axes) or the .plotted
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-<dl class="method">
-<dt id="illumination.frames.imshowFrame.process_image">
-<code class="descname">process_image</code><span class="sig-paren">(</span><em>image</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/illumination/frames/imshowFrame.html#imshowFrame.process_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#illumination.frames.imshowFrame.process_image" title="Permalink to this definition">¶</a></dt>
-<dd><p>Apply any extra processing steps to the image
-(subract a median image, normalize, mask, ???)</p>
 </dd></dl>
 
 <dl class="method">
@@ -993,13 +994,13 @@ calling <cite>i.plot()</cite> from the illustration.</p>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">draw_arrows</span></code></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get_processed_image</span></code></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">process_image</span></code></td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
@@ -1076,13 +1077,13 @@ not those that have been transformed for display.)</p>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">draw_arrows</span></code></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get_processed_image</span></code></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">process_image</span></code></td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
@@ -1160,13 +1161,13 @@ check it out for more options.</p>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">draw_arrows</span></code></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get_processed_image</span></code></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">process_image</span></code></td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
@@ -1227,13 +1228,13 @@ onward from Camera to display.</p>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">draw_arrows</span></code></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get_processed_image</span></code></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">input</span></code></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">process_image</span></code></td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">report</span></code></td>
